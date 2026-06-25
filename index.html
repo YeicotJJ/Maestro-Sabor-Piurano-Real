@@ -54,8 +54,9 @@
   .icon-btn:focus-visible{outline:none;box-shadow:var(--ring)}
 
   /* generic visual holder (image OR emoji) */
-  .vis{display:inline-flex;align-items:center;justify-content:center;line-height:1;flex:0 0 auto;overflow:hidden}
+  .vis{display:inline-flex;align-items:center;justify-content:center;line-height:1;flex:0 0 auto;overflow:hidden;vertical-align:middle}
   .vis img{width:100%;height:100%;object-fit:contain;display:block}
+  .btn .vis{margin-right:5px}
 
   /* SCREENS */
   .screens{position:relative;flex:1;min-height:0}
@@ -310,7 +311,7 @@
           <h1 class="title">Maestro del<br>Sabor Piurano</h1>
           <p class="lead">Conviértete en cocinero del legendario <b style="color:var(--aji-soft)">frito piurano</b>. Cuatro niveles, del mercado al emplatado, donde la tradición se gana a pulso.</p>
           <div style="display:flex;gap:14px;margin:18px 0;flex-wrap:wrap;justify-content:center;font-size:12px;color:var(--crema-dim)">
-            <span>🛒 Escoge</span><span>🔪 Prepara</span><span>🔥 Cocina</span><span>🍽️ Sirve</span>
+            <span><span data-ui="stepMarket" data-size="16"></span> Escoge</span><span><span data-ui="stepPrep" data-size="16"></span> Prepara</span><span><span data-ui="stepCook" data-size="16"></span> Cocina</span><span><span data-ui="stepServe" data-size="16"></span> Sirve</span>
           </div>
           <button class="btn" id="startBtn">Entrar a la cocina</button>
         </div>
@@ -326,7 +327,7 @@
         <div class="l1-stage">
           <div class="l1-ring-wrap">
             <div class="l1-ring" id="l1Ring"></div>
-            <div class="l1-center">🧺<small>Faltan <span id="l1Count">8</span></small></div>
+            <div class="l1-center"><span data-ui="basket" data-size="34"></span><small>Faltan <span id="l1Count">8</span></small></div>
           </div>
         </div>
       </section>
@@ -343,7 +344,7 @@
           <div class="l2-toast" id="l2Toast">¡Muy rápido!</div>
           <div class="l2-item" id="l2Item"></div>
           <div class="l2-guide" id="l2Guide"></div>
-          <div class="knife" id="l2Knife">🔪</div>
+          <div class="knife" id="l2Knife" data-ui="knife" data-size="46"></div>
           <div class="l2-hint" id="l2BoardHint">Desliza para pelar</div>
         </div>
       </section>
@@ -358,7 +359,7 @@
           <div class="next-hint">Siguiente: <b id="l3NextName">Aceite</b></div>
           <div class="order-list" id="l3Order"></div>
           <div class="l3-drop" id="l3Drop">
-            <div class="l3-pot-mini">🍲</div>
+            <div class="l3-pot-mini" data-ui="pot" data-size="84"></div>
             <span class="l3-drop-label">Suelta aquí, en orden</span>
           </div>
         </div>
@@ -384,9 +385,9 @@
                 <div class="bar-wrap"><div class="bar-fill" id="l3Burn" style="width:0;background:linear-gradient(90deg,#caa23e,var(--ladrillo))"></div></div></div>
             </div>
             <div class="cook-ctrls">
-              <button class="btn" id="l3Up">🔥 Subir fuego</button>
-              <button class="btn ghost" id="l3Stir">🥄 Remover</button>
-              <button class="btn" id="l3Down">💨 Bajar fuego</button>
+              <button class="btn" id="l3Up"><span data-ui="fireUp" data-size="18"></span> Subir fuego</button>
+              <button class="btn ghost" id="l3Stir"><span data-ui="spoon" data-size="18"></span> Remover</button>
+              <button class="btn" id="l3Down"><span data-ui="fireDown" data-size="18"></span> Bajar fuego</button>
             </div>
           </div>
         </div>
@@ -424,7 +425,7 @@
     </div></div>
 
     <div class="overlay" id="ovFail"><div class="card">
-      <div style="font-size:54px">😅</div>
+      <div data-ui="fail" data-size="54" style="display:grid;place-items:center"></div>
       <h2 class="title">Se te pasó el tiempo</h2>
       <p class="lead" id="ovFailText" style="text-align:center"></p>
       <button class="btn" id="ovFailBtn">Reintentar nivel</button>
@@ -435,10 +436,9 @@
       <div class="lvl-tag" style="justify-content:center">Título desbloqueado</div>
       <div class="unlock">Maestro del<br>Sabor Piurano</div>
       <div class="final-badges" id="finalBadges"></div>
-      <div class="rank"><span>🏆</span><span>Has cocinado mejor que el <b>85%</b> de los jugadores esta semana</span></div>
+      <div class="rank"><span data-ui="trophy" data-size="22"></span><span>Has cocinado mejor que el <b>85%</b> de los jugadores esta semana</span></div>
       <p class="culture" id="finalCulture" style="font-style:italic"></p>
       <div class="btn-row" style="justify-content:center">
-        <button class="btn ghost" id="finalMusic">🎵 Música criolla</button>
         <button class="btn" id="finalReplay">Cocinar de nuevo</button>
       </div>
     </div></div>
@@ -474,27 +474,27 @@
    window.__GAME_ASSETS__ antes de iniciar.
    ════════════════════════════════════════════════════════════════════════ */
 const ASSETS = {
-  base: 'assets/',
-  ext:  '.png',
+  base: 'src/img/',
+  ext:  '.webp',
 
   // ---- Nivel 1 + Nivel 3 (ingredientes) ----  {name, emoji, img}
   ingredients: {
-    cerdo:    { name:'Carne de cerdo', emoji:'🥩', img:null },
-    ajo:      { name:'Ajo',            emoji:'🧄', img:null },
-    cebolla:  { name:'Cebolla',        emoji:'🧅', img:null },
-    aji:      { name:'Ají amarillo',   emoji:'🌶️', img:null },
-    chicha:   { name:'Chicha de jora', emoji:'🍺', img:null },
-    yuca:     { name:'Yuca',           emoji:'🥔', img:null },
-    limon:    { name:'Limón',          emoji:'🍋', img:null },
-    culantro: { name:'Culantro',       emoji:'🌿', img:null },
-    aceite:   { name:'Aceite',         emoji:'🫗', img:null },
+    cerdo:    { name:'Carne de cerdo', emoji:'🥩', img:"cerdo.webp" },
+    ajo:      { name:'Ajo',            emoji:'🧄', img:"ajo.webp" },
+    cebolla:  { name:'Cebolla',        emoji:'🧅', img:"cebolla.webp" },
+    aji:      { name:'Ají amarillo',   emoji:'🌶️', img:"aji.webp" },
+    chicha:   { name:'Chicha de jora', emoji:'🍺', img:"chicha.webp" },
+    yuca:     { name:'Yuca',           emoji:'🥔', img:"yuca.webp" },
+    limon:    { name:'Limón',          emoji:'🍋', img:"limon.webp" },
+    culantro: { name:'Culantro',       emoji:'🌿', img:"culantro.webp" },
+    aceite:   { name:'Aceite',         emoji:'🫗', img:"aceite.webp" },
     // incorrectos del nivel 1
-    pimiento: { name:'Pimiento',       emoji:'🫑', img:null },
-    menestra: { name:'Menestra',       emoji:'🫘', img:null },
-    pescado:  { name:'Pescado',        emoji:'🐟', img:null },
-    caldo:    { name:'Caldo de pollo', emoji:'🍲', img:null },
-    fideos:   { name:'Fideos',         emoji:'🍜', img:null },
-    lechuga:  { name:'Lechuga',        emoji:'🥬', img:null },
+    pimiento: { name:'Pimiento',       emoji:'🫑', img:"pimiento.webp" },
+    menestra: { name:'Menestra',       emoji:'🫘', img:"menestra.webp" },
+    pescado:  { name:'Pescado',        emoji:'🐟', img:"pescado.webp" },
+    caldo:    { name:'Caldo de pollo', emoji:'🍲', img:"caldo.webp" },
+    fideos:   { name:'Fideos',         emoji:'🍜', img:"fideos.webp" },
+    lechuga:  { name:'Lechuga',        emoji:'🥬', img:"lechuga.webp" },
   },
 
   // ---- Nivel 4 (piezas para servir) ----
@@ -512,22 +512,51 @@ const ASSETS = {
     { name:'Guardián del sabor',    emoji:'🛡️', img:null },
     { name:'Embajador del plato',   emoji:'🍽️', img:null },
   ],
-  finalPlate: { name:'Frito piurano servido', emoji:'🍽️', img:null },
+  finalPlate: { name:'Frito piurano servido', emoji:'🍽️', img:"final.webp" },
 
-  // ---- Música de la pantalla final ----
-  // Pega un link o ID de YouTube. Si es null, suena una melodía criolla sintetizada.
-  // Acepta: 'https://www.youtube.com/watch?v=XXXXXXXXXXX', 'https://youtu.be/XXXXXXXXXXX',
-  //         'https://www.youtube.com/embed/XXXXXXXXXXX', o solo el ID 'XXXXXXXXXXX'.
-  music: { youtube: 'https://www.youtube.com/watch?v=SesyUMx7EJ0' },
+  // ---- Música de FONDO de todo el juego ----
+  // Suena en bucle desde que entras a la cocina hasta el final.
+  // Prioridad: mp3 > youtube > melodía sintetizada.
+  //  - mp3: ruta o URL a un archivo de audio (.mp3, .ogg, .m4a). Ej: 'src/fondo.mp3' o 'https://.../x.mp3'
+  //  - youtube: link o ID de YouTube (requiere servir por http(s); no funciona en file://)
+  //  - volume: 0 a 1
+  music: { mp3: "src/fondo.mp3", youtube: null, volume: 0.1 },
+
+  // ---- Íconos de interfaz (cámbialos por imágenes igual que el resto) ----
+  ui: {
+    basket:    { emoji:'🧺', img:null },  // canasta (centro del nivel 1)
+    pot:       { emoji:'🍲', img:null },  // olla (zona de arrastre del nivel 3)
+    knife:     { emoji:'🔪', img:null },  // cuchillo (nivel 2)
+    bowl:      { emoji:'🥣', img:null },  // recipiente del aderezo (paso "mezclar")
+    spoon:     { emoji:'🥄', img:null },  // botón remover (nivel 3)
+    fireUp:    { emoji:'🔥', img:null },  // botón subir fuego
+    fireDown:  { emoji:'💨', img:null },  // botón bajar fuego
+    trophy:    { emoji:'🏆', img:null },  // ranking final
+    fail:      { emoji:'😅', img:null },  // pantalla de "se acabó el tiempo"
+    stepMarket:{ emoji:'🛒', img:null },  // menú inicio: escoger
+    stepPrep:  { emoji:'🔪', img:null },  // menú inicio: preparar
+    stepCook:  { emoji:'🔥', img:null },  // menú inicio: cocinar
+    stepServe: { emoji:'🍽️', img:null },  // menú inicio: servir
+  },
 
   // ---- Secuencias progresivas (listas de archivos; vacías = usa el emoji/CSS) ----
   sequences: {
-    pelar:   [],   // ej: ['ajo_1','ajo_2','ajo_3']
-    cortar:  [],   // ej: ['cebolla_1','cebolla_2','cebolla_3']
+    pelar:   ["ajo_0.webp","ajo_1.webp","ajo_2.webp"],   // ej: ['ajo_1','ajo_2','ajo_3']
+    cortar:  ["cebolla_0.webp","cebolla_1.webp","cebolla_2.webp","cebolla_3.webp","cebolla_4.webp","cebolla_5.webp"],   // ej: ['cebolla_1','cebolla_2','cebolla_3']
     picar:   [],   // ej: ['aji_1','aji_2','aji_3']
     mezclar: [],   // ej: ['aderezo_1','aderezo_2','aderezo_3']
     cocina:  [],   // ej: ['olla_1','olla_2','olla_3','olla_4'] (crudo -> listo)
     plato:   [],   // ej: ['plato_preparado_1', ... ] (vacío -> plato completo)
+  },
+
+  // ---- Tamaño (alto) de los items grandes del Nivel 2, en vh ----
+  // Cambia el tamaño del ajo/cebolla/ají/aderezo que se cortan en la tabla.
+  // Es el alto en unidades vh (1vh = 1% del alto de la pantalla). Pon null para usar el tamaño por defecto.
+  l2ItemSize: {
+    pelar:   16,   // ajos
+    cortar:  50,   // cebolla
+    picar:   16,   // ají
+    mezclar: 16,   // aderezo
   },
 };
 // Permite override externo opcional
@@ -566,6 +595,12 @@ function makeVisual(spec, px){
   return v;
 }
 function setVisual(container, spec, px){ container.replaceChildren(makeVisual(spec, px)); }
+
+// Íconos de interfaz: render por clave de ASSETS.ui (imagen o emoji)
+function uiSpec(k){ return (ASSETS.ui && ASSETS.ui[k]) || {emoji:'❔'}; }
+function uiVisual(k,px){ return makeVisual(uiSpec(k), px); }
+// Rellena todos los [data-ui] estáticos del HTML con su imagen/emoji
+function hydrateUI(){ $$('[data-ui]').forEach(e=>{ e.replaceChildren(uiVisual(e.dataset.ui, +e.dataset.size||22)); }); }
 
 // Secuencia progresiva: si hay imágenes usa <img> y cambia src; si no, emoji fijo.
 function makeFrames(seq, fallbackEmoji, px){
@@ -660,6 +695,49 @@ const Yt = {
       this.playing=true; Audio_.stopMelody(); }catch(e){} },
   pause(){ this.pending=false; this.playing=false; if(this.ready){ try{ this.player.pauseVideo(); }catch(e){} } },
   setMute(m){ if(this.ready){ try{ m?this.player.mute():this.player.unMute(); }catch(e){} } }
+};
+
+/* ---------- MÚSICA DE FONDO (todo el juego) ---------- */
+const BGM = {
+  started:false, mode:null, audio:null,
+  setup(){
+    const m = ASSETS.music || {};
+    this.volume = (typeof m.volume==='number') ? m.volume : 0.6;
+    if(m.mp3){
+      this.mode='mp3';
+      this.audio=new Audio(m.mp3);
+      this.audio.loop=true; this.audio.preload='auto'; this.audio.volume=this.volume;
+      this.audio.addEventListener('error',()=>{ // si el mp3 no carga, cae a la melodía
+        this.mode='synth'; if(this.started && !Audio_.isMuted()) Audio_.startMelody(); });
+      return;
+    }
+    // sin mp3: probar YouTube
+    Yt.setup();
+    this.mode = Yt.available() ? 'yt' : 'synth';
+  },
+  start(){
+    if(this.started) return; this.started=true;
+    if(this.mode==='mp3'){
+      this.audio.muted = Audio_.isMuted();
+      this.audio.play().catch(()=>{ // navegador bloqueó el autoplay o falló el archivo
+        if(!Audio_.isMuted()){ this.mode='synth'; Audio_.startMelody(); } });
+    } else if(this.mode==='yt'){
+      Yt.play();
+      clearTimeout(Yt._fb);
+      Yt._fb=setTimeout(()=>{ if(!Yt.playing && !Audio_.isMuted()){ this.mode='synth'; Audio_.startMelody(); } }, 2800);
+    } else {
+      if(!Audio_.isMuted()) Audio_.startMelody();
+    }
+  },
+  setMuted(m){
+    if(this.audio) this.audio.muted=m;
+    Yt.setMute(m);
+    if(m){ Audio_.stopMelody(); }
+    else {
+      if(this.mode==='mp3' && this.audio){ this.audio.muted=false; if(this.audio.paused && this.started) this.audio.play().catch(()=>{}); }
+      else if(this.mode==='synth' && this.started && !Yt.playing){ Audio_.startMelody(); }
+    }
+  }
 };
 
 /* ---------- STATE / TEXTS ---------- */
@@ -788,11 +866,15 @@ const Level2 = (()=> {
     timer.start(); bindBoard();
   }
   function renderSteps(){ const c=$('#l2Steps'); c.innerHTML='';
+    const ic={ pelar:ASSETS.ingredients.ajo, cortar:ASSETS.ingredients.cebolla, picar:ASSETS.ingredients.aji, mezclar:ASSETS.ui.bowl };
     tasks.forEach((t,i)=>{ const d=el('div','l2-step'+(i<idx?' done':i===idx?' active':''));
-      d.innerHTML=`<span class="se">${t.se}</span>${t.label}`; c.appendChild(d); }); }
+      const se=el('span','se'); se.appendChild(makeVisual(ic[t.id]||{emoji:t.se},22)); d.appendChild(se);
+      d.appendChild(document.createTextNode(t.label)); c.appendChild(d); }); }
   function loadTask(){ const t=tasks[idx]; prog=0; lastCut=0;
     frames=makeFrames(ASSETS.sequences[t.id], t.emoji, 120);
     $('#l2Item').replaceChildren(frames.node);
+    const sz = ASSETS.l2ItemSize && ASSETS.l2ItemSize[t.id];   // alto en vh (opcional)
+    if(sz!=null){ const n=frames.node; n.style.width=sz+'vh'; n.style.height=sz+'vh'; n.style.fontSize=(sz*0.78)+'vh'; }
     $('#l2BoardHint').textContent=t.hint; $('#l2Prog').style.width='0%';
     $('#l2Instr').innerHTML = t.type==='cut'
       ? 'Desliza <b>hacia abajo</b> sobre el alimento para cortar. <b>Con ritmo</b>: si vas muy rápido, sale mal picado.'
@@ -987,26 +1069,11 @@ function showFinal(){
   ASSETS.badges.forEach(b=>{ const d=el('div','fb'); d.appendChild(makeVisual(b,34)); fb.appendChild(d); });
   $('#finalCulture').textContent=FINAL_MSG; showOverlay('ovFinal'); Audio_.fanfare(); confetti($('#ovFinal'),70);
 }
-$('#finalMusic').onclick=function(){
-  const btn=this;
-  if(btn.dataset.on==='1'){ btn.dataset.on='0'; btn.textContent='🎵 Música criolla'; Yt.pause(); Audio_.stopMelody(); clearTimeout(Yt._fb); return; }
-  btn.dataset.on='1'; btn.textContent='⏸ Pausar música';
-  if(Yt.available()){
-    Yt.play();
-    // Si YouTube no llega a sonar (entorno que bloquea el iframe), cae a la melodía.
-    clearTimeout(Yt._fb);
-    Yt._fb=setTimeout(()=>{ if(btn.dataset.on==='1' && !Yt.playing && !Audio_.isMuted()) Audio_.startMelody(); }, 2800);
-  } else {
-    if(!Audio_.isMuted()) Audio_.startMelody();
-  }
-};
-$('#finalReplay').onclick=()=>{ clearTimeout(Yt._fb); Yt.pause(); Audio_.stopMelody();
-  $('#finalMusic').dataset.on='0'; $('#finalMusic').textContent='🎵 Música criolla';
-  State.level=0; State.badges=[false,false,false,false]; updateBadgesMini(); hideOverlay('ovFinal'); showScreen('scr-start'); };
+$('#finalReplay').onclick=()=>{ State.level=0; State.badges=[false,false,false,false]; updateBadgesMini(); hideOverlay('ovFinal'); showScreen('scr-start'); };
 
 /* ════════════ BOOT ════════════ */
-$('#startBtn').onclick=()=>{ Audio_.good(); goToLevelIntro(0); };
-$('#muteBtn').onclick=function(){ const m=Audio_.toggleMute(); Yt.setMute(m); this.textContent=m?'🔇':'🔊'; this.setAttribute('aria-label', m?'Activar sonido':'Silenciar sonido'); };
+$('#startBtn').onclick=()=>{ Audio_.good(); BGM.start(); goToLevelIntro(0); };
+$('#muteBtn').onclick=function(){ const m=Audio_.toggleMute(); BGM.setMuted(m); this.textContent=m?'🔇':'🔊'; this.setAttribute('aria-label', m?'Activar sonido':'Silenciar sonido'); };
 $('#fsBtn').onclick=function(){
   try{
     const root=document.documentElement;
@@ -1024,7 +1091,8 @@ document.addEventListener('fullscreenchange',()=>{ const b=$('#fsBtn'); if(b) b.
     s.style.animationDuration=rand(3,5)+'s'; host.appendChild(s); setTimeout(()=>s.remove(),5000); },500); })();
 
 buildBadgesMini();
-Yt.setup();
+hydrateUI();
+BGM.setup();
 </script>
 </body>
 </html>
