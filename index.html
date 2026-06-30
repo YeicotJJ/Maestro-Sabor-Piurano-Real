@@ -14,101 +14,118 @@
     --naranja:#df6f1c; --naranja-bright:#f58a2a;
     --aji:#f4b616; --aji-soft:#ffcf4a; --ladrillo:#b23a1e;
     --verde:#7a9a40; --verde-deep:#5d7a2e; --oro:#ecbb4f;
-    --shadow:rgba(0,0,0,.45); --ring:0 0 0 3px rgba(244,182,22,.35);
+    --amarillo:#e6c33a; --ring:0 0 0 3px rgba(244,182,22,.35);
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   html,body{height:100%}
-  body{
-    font-family:"DM Sans",system-ui,sans-serif;color:var(--crema);
-    background:
-      radial-gradient(120% 80% at 50% -10%, #4a2e18 0%, transparent 55%),
-      repeating-linear-gradient(92deg, #2c1a0d 0px, #301d0f 6px, #2a180c 12px, #311e10 18px),
-      var(--wood-deep);
-    overflow:hidden;-webkit-user-select:none;user-select:none;
-  }
-  #app{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:0}
-  .stage{
-    position:relative;width:100%;max-width:none;height:100%;max-height:none;
+  body{font-family:"DM Sans",system-ui,sans-serif;color:var(--crema);
+    background:radial-gradient(120% 80% at 50% -10%, #4a2e18 0%, transparent 55%),
+      repeating-linear-gradient(92deg, #2c1a0d 0px, #301d0f 6px, #2a180c 12px, #311e10 18px), var(--wood-deep);
+    overflow:hidden;-webkit-user-select:none;user-select:none;}
+  #app{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+  .stage{position:relative;width:100%;height:100%;
     background:linear-gradient(180deg, rgba(92,58,34,.55), rgba(36,20,9,.7)),
       repeating-linear-gradient(0deg, rgba(255,255,255,.018) 0 2px, transparent 2px 9px);
-    border:none;border-radius:0;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
-    overflow:hidden;display:flex;flex-direction:column;
-  }
-  /* HUD */
-  .hud{display:flex;align-items:center;gap:10px;padding:12px 16px;
-    background:linear-gradient(180deg, rgba(20,10,4,.85), rgba(20,10,4,.35));
-    border-bottom:1px solid rgba(236,187,79,.18);backdrop-filter:blur(3px);z-index:30;}
-  .hud .brand{font-family:"Bevan",serif;font-size:14px;letter-spacing:.3px;color:var(--aji);line-height:1;flex:0 0 auto}
-  .hud .brand b{display:block;font-size:9px;letter-spacing:3px;color:var(--crema-dim);font-family:"DM Mono",monospace;opacity:.7}
-  .hud .spacer{flex:1}
-  .badges-mini{display:flex;gap:5px}
-  .badges-mini .b{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;
-    background:radial-gradient(circle at 35% 30%, #6a4422, #2c1a0d);
-    border:1.5px solid rgba(236,187,79,.25);color:#5c4a32;filter:grayscale(.8);opacity:.5;transition:.4s;overflow:hidden}
-  .badges-mini .b.on{background:radial-gradient(circle at 35% 30%, var(--aji-soft), var(--naranja));
-    border-color:var(--oro);color:#3a2414;filter:none;opacity:1;box-shadow:0 0 12px rgba(244,182,22,.5);}
-  .icon-btn{width:34px;height:34px;border-radius:10px;border:1px solid rgba(236,187,79,.3);
-    background:rgba(0,0,0,.25);color:var(--crema);font-size:15px;cursor:pointer;display:grid;place-items:center;transition:.2s}
-  .icon-btn:hover{background:rgba(244,182,22,.18)}
-  .icon-btn:focus-visible{outline:none;box-shadow:var(--ring)}
+    overflow:hidden;display:flex;flex-direction:column;}
 
-  /* generic visual holder (image OR emoji) */
+  /* visual holder */
   .vis{display:inline-flex;align-items:center;justify-content:center;line-height:1;flex:0 0 auto;overflow:hidden;vertical-align:middle}
   .vis img{width:100%;height:100%;object-fit:contain;display:block}
   .btn .vis{margin-right:5px}
 
+  /* HUD */
+  .hud{display:flex;align-items:center;gap:10px;padding:10px 14px;position:relative;z-index:70;
+    background:linear-gradient(180deg, rgba(20,10,4,.92), rgba(20,10,4,.5));
+    border-bottom:1px solid rgba(236,187,79,.18);}
+  .hud .brand{font-family:"Bevan",serif;font-size:13px;color:var(--aji);line-height:1;flex:0 0 auto}
+  .points{flex:1;max-width:280px;display:flex;align-items:center;gap:8px}
+  .points-bar{flex:1;height:14px;border-radius:999px;background:rgba(0,0,0,.4);overflow:hidden;border:1px solid rgba(236,187,79,.25);position:relative}
+  .points-fill{height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--verde),var(--aji),var(--naranja));transition:width .8s cubic-bezier(.2,1,.3,1)}
+  .points-txt{font-family:"DM Mono",monospace;font-size:12px;font-weight:500;color:var(--aji-soft);min-width:42px;text-align:right}
+  .rank-badge{font-family:"DM Mono",monospace;font-size:11px;letter-spacing:.5px;color:var(--crema-dim);
+    background:rgba(0,0,0,.3);border:1px solid rgba(236,187,79,.25);border-radius:999px;padding:5px 11px;white-space:nowrap}
+  .rank-badge b{color:var(--aji)}
+  /* puntos y rango ocultos hasta que empieza el juego (no en el menú) */
+  .points, .rank-badge{opacity:0;visibility:hidden;transition:opacity .45s ease, visibility .45s}
+  .stage.show-prog .points, .stage.show-prog .rank-badge{opacity:1;visibility:visible}
+  /* coach-mark: resaltar y señalar un elemento durante la explicación */
+  .coach{position:relative;z-index:60;border-radius:12px;box-shadow:0 0 0 3px var(--aji),0 0 22px rgba(244,182,22,.85);animation:coachPulse 1s ease-in-out infinite}
+  @keyframes coachPulse{50%{box-shadow:0 0 0 5px var(--aji),0 0 32px rgba(244,182,22,1)}}
+  .coach-label{position:fixed;transform:translateX(-50%);z-index:62;background:var(--aji);color:#2a1709;font-weight:700;font-size:11px;
+    padding:4px 10px;border-radius:999px;box-shadow:0 5px 12px rgba(0,0,0,.5);white-space:nowrap;animation:coachBob 1s ease-in-out infinite}
+  @keyframes coachBob{50%{transform:translateX(-50%) translateY(3px)}}
+  .bonus{position:fixed;transform:translate(-50%,0);z-index:62;color:#bfe6a0;font-family:"DM Mono",monospace;font-weight:700;font-size:16px;
+    text-shadow:0 2px 6px #000;animation:sparkUp .9s ease-out forwards}
+  .timer.bonus-flash{animation:bonusFlash .5s ease}
+  @keyframes bonusFlash{0%,100%{box-shadow:none}50%{box-shadow:0 0 16px rgba(122,154,64,.9);border-color:var(--verde);color:#cfe09a}}
+  /* tabla de ranking (placeholder) */
+  .rank-table{width:100%;max-width:360px;border-collapse:collapse;font-size:13px;margin-top:4px}
+  .rank-table th{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--crema-dim);text-align:left;padding:6px 8px;border-bottom:1px solid rgba(236,187,79,.25)}
+  .rank-table td{padding:7px 8px;border-bottom:1px solid rgba(255,255,255,.06);color:var(--crema)}
+  .rank-table td.t{font-family:"DM Mono",monospace;color:var(--aji-soft);text-align:right}
+  .rank-table td.p{font-family:"DM Mono",monospace;color:var(--crema-dim);width:26px}
+  .rank-table tr.me td{background:rgba(244,182,22,.16);color:var(--aji-soft);font-weight:700}
+  .rank-ph{font-size:11px;color:var(--crema-dim);opacity:.75;margin-top:6px}
+  .hud-btns{display:flex;gap:6px}
+  .icon-btn{width:32px;height:32px;border-radius:9px;border:1px solid rgba(236,187,79,.3);background:rgba(0,0,0,.25);
+    color:var(--crema);font-size:14px;cursor:pointer;display:grid;place-items:center;transition:.2s}
+  .icon-btn:hover{background:rgba(244,182,22,.18)}
+  .icon-btn:focus-visible{outline:none;box-shadow:var(--ring)}
+
   /* SCREENS */
   .screens{position:relative;flex:1;min-height:0}
-  .scr{position:absolute;inset:0;display:none;flex-direction:column;padding:18px max(18px,calc((100% - 900px)/2)) 24px;overflow:auto}
-  .scr.active{display:flex;animation:fade .45s ease}
+  .scr{position:absolute;inset:0;display:none;flex-direction:column;padding:16px max(16px,calc((100% - 880px)/2)) 22px;overflow:auto}
+  .scr.active{display:flex;animation:fade .4s ease}
   @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-  .lvl-tag{font-family:"DM Mono",monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;
-    color:var(--aji);display:inline-flex;align-items:center;gap:7px;margin-bottom:6px}
+  .lvl-tag{font-family:"DM Mono",monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--aji);
+    display:inline-flex;align-items:center;gap:7px;margin-bottom:5px}
   .lvl-tag::before{content:"";width:18px;height:2px;background:var(--aji);display:inline-block}
-  h1.title{font-family:"Bevan",serif;font-size:clamp(26px,6vw,40px);line-height:1.02;color:var(--crema);letter-spacing:.2px}
-  h2.title{font-family:"Bevan",serif;font-size:clamp(22px,5.2vw,32px);line-height:1.05;color:var(--crema)}
+  h1.title{font-family:"Bevan",serif;font-size:clamp(26px,6vw,40px);line-height:1.02;color:var(--crema)}
+  h2.title{font-family:"Bevan",serif;font-size:clamp(20px,5vw,30px);line-height:1.05;color:var(--crema)}
   .lead{color:var(--crema-dim);font-size:15px;line-height:1.55;max-width:46ch;margin-top:8px}
-  .play-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-  .timer{font-family:"DM Mono",monospace;font-weight:500;font-size:16px;background:rgba(0,0,0,.3);
-    border:1px solid rgba(236,187,79,.25);border-radius:999px;padding:7px 13px;color:var(--crema);
-    display:flex;align-items:center;gap:7px;min-width:92px;justify-content:center}
+  .instr{font-size:13.5px;color:var(--crema-dim);line-height:1.5;margin-bottom:10px}
+  .instr b{color:var(--aji-soft)}
+  .center-col{margin:auto;text-align:center;display:flex;flex-direction:column;align-items:center;max-width:48ch}
+
+  .play-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+  .timer{font-family:"DM Mono",monospace;font-weight:500;font-size:15px;background:rgba(0,0,0,.3);
+    border:1px solid rgba(236,187,79,.25);border-radius:999px;padding:6px 12px;color:var(--crema);display:flex;align-items:center;gap:6px;min-width:84px;justify-content:center}
   .timer.warn{color:#ffd27a;border-color:#caa23e;animation:pulseW 1s infinite}
   .timer.danger{color:#ff9a6b;border-color:var(--ladrillo);animation:pulseW .55s infinite}
   @keyframes pulseW{50%{box-shadow:0 0 14px rgba(178,58,30,.6)}}
-  .bar-wrap{flex:1;height:12px;border-radius:999px;background:rgba(0,0,0,.35);overflow:hidden;border:1px solid rgba(236,187,79,.18)}
+  .bar-wrap{flex:1;min-width:120px;height:11px;border-radius:999px;background:rgba(0,0,0,.35);overflow:hidden;border:1px solid rgba(236,187,79,.18)}
   .bar-fill{height:100%;width:100%;border-radius:999px;background:linear-gradient(90deg,var(--verde),var(--aji));transition:width .25s linear}
-  .instr{font-size:13.5px;color:var(--crema-dim);line-height:1.5;margin-bottom:12px}
-  .instr b{color:var(--aji-soft)}
-  .btn{font-family:"DM Sans";font-weight:700;font-size:16px;cursor:pointer;border:none;padding:14px 26px;border-radius:14px;color:#2a1709;
+  .counter-chip{font-family:"DM Mono",monospace;font-size:12px;background:rgba(0,0,0,.3);border:1px solid rgba(236,187,79,.25);
+    border-radius:999px;padding:6px 11px;color:var(--crema-dim)}
+  .counter-chip b{color:var(--aji-soft)}
+
+  /* BUTTONS */
+  .btn{font-family:"DM Sans";font-weight:700;font-size:16px;cursor:pointer;border:none;padding:13px 26px;border-radius:14px;color:#2a1709;
     background:linear-gradient(180deg,var(--aji-soft),var(--naranja));
-    box-shadow:0 8px 0 -2px #8a4612, 0 12px 22px -8px rgba(0,0,0,.6);transition:transform .12s, box-shadow .12s;letter-spacing:.2px}
+    box-shadow:0 8px 0 -2px #8a4612, 0 12px 22px -8px rgba(0,0,0,.6);transition:transform .12s, box-shadow .12s}
   .btn:hover{transform:translateY(-1px)}
   .btn:active{transform:translateY(3px);box-shadow:0 4px 0 -2px #8a4612,0 8px 16px -8px rgba(0,0,0,.6)}
   .btn:focus-visible{outline:none;box-shadow:0 8px 0 -2px #8a4612, var(--ring)}
   .btn.ghost{background:rgba(255,255,255,.06);color:var(--crema);box-shadow:inset 0 0 0 1.5px rgba(236,187,79,.4)}
   .btn.ghost:active{transform:translateY(2px);box-shadow:inset 0 0 0 1.5px rgba(236,187,79,.4)}
-  .btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:auto;padding-top:16px}
-  .center-col{margin:auto;text-align:center;display:flex;flex-direction:column;align-items:center;max-width:48ch}
+  .btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:auto;padding-top:14px}
 
-  /* L1 — carrusel giratorio (los ingredientes dan vueltas) */
-  .l1-stage{flex:1;position:relative;min-height:340px;overflow:hidden}
-  .l1-ring-wrap{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-    width:min(92vw,380px);height:min(92vw,380px)}
-  .l1-ring{position:absolute;inset:0;border-radius:50%;animation:l1spin var(--l1-spin,30s) linear infinite}
+  /* L1 carousel */
+  .l1-stage{flex:1;position:relative;min-height:330px;overflow:hidden}
+  .l1-ring-wrap{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(94vw,440px);height:min(94vw,440px)}
+  .l1-ring{position:absolute;inset:0;border-radius:50%;animation:l1spin var(--l1-spin,34s) linear infinite}
   .l1-ring::before{content:"";position:absolute;inset:5%;border-radius:50%;border:2px dashed rgba(236,187,79,.16)}
-  .l1-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:94px;height:94px;border-radius:50%;
-    display:grid;place-items:center;text-align:center;z-index:3;font-size:30px;
-    background:radial-gradient(circle at 40% 32%, #5a3a20, #251307);border:2px solid rgba(236,187,79,.25);
-    box-shadow:inset 0 0 18px rgba(0,0,0,.5)}
-  .l1-center small{position:absolute;bottom:11px;left:0;right:0;font-size:9.5px;color:var(--crema-dim);font-weight:700;font-family:"DM Mono",monospace}
+  .l1-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:90px;height:90px;border-radius:50%;
+    display:grid;place-items:center;text-align:center;z-index:3;
+    background:radial-gradient(circle at 40% 32%, #5a3a20, #251307);border:2px solid rgba(236,187,79,.25);box-shadow:inset 0 0 18px rgba(0,0,0,.5)}
+  .l1-center .vis{width:32px;height:32px;font-size:28px}
+  .l1-center small{position:absolute;bottom:9px;left:0;right:0;font-size:9px;color:var(--crema-dim);font-weight:700;font-family:"DM Mono",monospace}
   .orbit{position:absolute;transform:translate(-50%,-50%)}
-  .l1-tile{position:relative;cursor:pointer;border:1.5px solid rgba(236,187,79,.22);border-radius:14px;padding:7px 5px;
-    width:62px;min-height:66px;background:linear-gradient(180deg,#6b4426,#43291590);
-    display:flex;align-items:center;justify-content:center;transition:box-shadow .2s,background .3s}
-  .l1-counter{display:flex;flex-direction:column;align-items:center;gap:3px;animation:l1spinrev var(--l1-spin,30s) linear infinite}
-  .l1-tile .vis{width:38px;height:38px;font-size:30px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.4))}
-  .l1-tile .nm{font-size:9.5px;color:var(--crema-dim);font-weight:600;line-height:1.1;text-align:center}
+  .l1-tile{position:relative;cursor:pointer;border:1.5px solid rgba(236,187,79,.22);border-radius:13px;padding:6px 4px;
+    width:58px;min-height:62px;background:linear-gradient(180deg,#6b4426,#43291590);display:flex;align-items:center;justify-content:center;transition:box-shadow .2s,background .3s}
+  .l1-counter{display:flex;flex-direction:column;align-items:center;gap:2px;animation:l1spinrev var(--l1-spin,34s) linear infinite}
+  .l1-tile .vis{width:34px;height:34px;font-size:27px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.4))}
+  .l1-tile .nm{font-size:9px;color:var(--crema-dim);font-weight:600;line-height:1.1;text-align:center}
   .l1-tile:hover{transform:scale(1.07)}
   .l1-tile:focus-visible{outline:none;box-shadow:var(--ring)}
   .l1-tile.good{background:linear-gradient(180deg,var(--aji-soft),var(--naranja));border-color:var(--oro);pointer-events:none;
@@ -120,978 +137,790 @@
   @keyframes pop{0%{transform:scale(.8)}60%{transform:scale(1.08)}100%{transform:scale(1)}}
   @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
 
-  /* L2 */
-  .l2-steps{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap}
-  .l2-step{flex:1;min-width:64px;text-align:center;padding:8px 4px;border-radius:11px;font-size:11px;font-weight:600;
-    background:rgba(0,0,0,.25);border:1px solid rgba(236,187,79,.15);color:var(--crema-dim);opacity:.55;transition:.3s}
-  .l2-step .se{font-size:20px;display:block;margin-bottom:2px}
-  .l2-step.active{opacity:1;border-color:var(--aji);color:var(--aji-soft);box-shadow:0 0 16px rgba(244,182,22,.25)}
-  .l2-step.done{opacity:1;background:rgba(122,154,64,.25);border-color:var(--verde);color:#cfe09a}
-  .l2-board{flex:1;min-height:240px;border-radius:20px;position:relative;overflow:hidden;touch-action:none;cursor:grab;
-    background:linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.35)),
-      repeating-linear-gradient(90deg,#7a5230 0 14px,#6e4a2a 14px 28px);
+  /* L2 cutting board */
+  .meat-board{flex:1;min-height:280px;border-radius:20px;position:relative;overflow:hidden;touch-action:none;cursor:crosshair;margin-top:6px;
+    background:linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,.34)),repeating-linear-gradient(90deg,#7a5230 0 16px,#6e4a2a 16px 32px);
     border:3px solid #4a3018;box-shadow:inset 0 0 40px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center}
-  .l2-board:active{cursor:grabbing}
-  .l2-item{display:flex;align-items:center;justify-content:center;pointer-events:none;transition:transform .1s}
-  .l2-item .vis{width:120px;height:120px;font-size:90px;filter:drop-shadow(0 8px 10px rgba(0,0,0,.45))}
-  .l2-hint{position:absolute;bottom:12px;left:0;right:0;text-align:center;font-size:13px;color:#fff;font-weight:600;text-shadow:0 2px 6px #000;pointer-events:none}
-  .l2-toast{position:absolute;top:14px;left:50%;transform:translateX(-50%);background:var(--ladrillo);color:#fff;
-    padding:6px 14px;border-radius:999px;font-size:12px;font-weight:700;opacity:0;transition:.2s;pointer-events:none}
-  .l2-toast.show{opacity:1}
-  .l2-prog{position:absolute;top:0;left:0;height:5px;background:linear-gradient(90deg,var(--verde),var(--aji));width:0;transition:width .12s}
-  .knife{position:absolute;font-size:46px;pointer-events:none;opacity:0;transform:translate(-50%,-50%) rotate(-25deg);filter:drop-shadow(0 4px 6px #000)}
-  /* L2 — flechas de guía (cómo cortar / revolver). Desaparecen al empezar la acción */
-  .l2-guide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:4;opacity:0;transition:opacity .25s}
-  .l2-guide.show{opacity:1}
-  .l2-guide .arw{color:#fff;filter:drop-shadow(0 4px 12px rgba(0,0,0,.65))}
-  .arw-chop{width:86px;height:120px;animation:arwDown 1.1s ease-in-out infinite}
-  .arw-swipe{width:132px;height:80px;animation:arwSwipe 1.3s ease-in-out infinite}
-  .arw-stir{width:118px;height:118px;animation:arwSpin 1.7s linear infinite}
-  @keyframes arwDown{0%{transform:translateY(-34px);opacity:0}22%{opacity:1}78%{transform:translateY(30px);opacity:1}100%{transform:translateY(44px);opacity:0}}
-  @keyframes arwSwipe{0%{transform:translateX(-36px);opacity:0}22%{opacity:1}78%{transform:translateX(30px);opacity:1}100%{transform:translateX(44px);opacity:0}}
-  @keyframes arwSpin{to{transform:rotate(360deg)}}
+  .meat{position:relative;width:min(80%,460px);height:46%;min-height:130px;border-radius:60px/40px;
+    background:radial-gradient(ellipse at 40% 35%, #d98a86, #b6504a 70%, #8f3a34);box-shadow:inset 0 -8px 16px rgba(0,0,0,.3), 0 8px 14px rgba(0,0,0,.4);display:flex}
+  .meat.has-img{background:none;box-shadow:none}
+  .meat .vis{width:100%;height:100%;font-size:90px}
+  .cut-line{position:absolute;top:6%;height:88%;width:0;border-left:3px dashed rgba(255,255,255,.55);transition:.2s}
+  .cut-line.done{border-left:3px solid var(--oro);box-shadow:0 0 8px var(--oro);transform:translateX(0)}
+  .fat{position:absolute;width:30px;height:24px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#fff7e0,#e9d9a8);
+    border:2px solid #d9c79a;box-shadow:0 2px 5px rgba(0,0,0,.35);cursor:pointer;z-index:4;display:grid;place-items:center;font-size:13px}
+  .fat::after{content:"✕";color:#b23a1e;font-weight:800;font-size:11px;opacity:0;transition:.15s}
+  .fat:hover::after{opacity:.7}
+  .knife-fx{position:absolute;font-size:42px;pointer-events:none;opacity:0;filter:drop-shadow(0 4px 6px #000);z-index:5}
+  .board-toast{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:var(--ladrillo);color:#fff;
+    padding:6px 14px;border-radius:999px;font-size:12px;font-weight:700;opacity:0;transition:.2s;pointer-events:none;z-index:6}
+  .board-toast.show{opacity:1}
 
-  /* L3 */
-  .pot-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;position:relative;min-height:220px}
-  .pot{width:180px;height:140px;position:relative;background:radial-gradient(ellipse at 50% 30%, #5a3a20, #241208);
-    border-radius:14px 14px 80px 80px/14px 14px 40px 40px;border:4px solid #1c0d05;
-    box-shadow:inset 0 8px 18px rgba(0,0,0,.6),0 14px 24px -8px #000;display:flex;align-items:flex-start;justify-content:center;overflow:hidden}
-  .pot .food{width:130px;height:60px;border-radius:50%;margin-top:18px;background:radial-gradient(ellipse,#caa15a,#8a5a2a);
-    transition:background .5s;position:relative;box-shadow:inset 0 -6px 10px rgba(0,0,0,.3)}
-  .pot .food.cooked{background:radial-gradient(ellipse,#a05a22,#5a2f10)}
-  .pot .food.burnt{background:radial-gradient(ellipse,#3a2410,#140a04)}
-  .pot .food.hidden-food{display:none}
-  .food-img{position:absolute;top:14px;left:50%;transform:translateX(-50%);display:none;z-index:2}
-  .food-img.on{display:flex}
-  .food-img .vis{width:140px;height:88px;font-size:64px}
-  .bubble{position:absolute;border-radius:50%;background:rgba(255,230,180,.5);animation:rise linear infinite}
-  @keyframes rise{0%{transform:translateY(0) scale(.4);opacity:0}30%{opacity:.8}100%{transform:translateY(-40px) scale(1.1);opacity:0}}
-  .flames{position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);display:flex;gap:3px;z-index:-1}
-  .flame{width:14px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:linear-gradient(0deg,var(--aji),var(--ladrillo));
-    transform-origin:bottom;animation:flick .25s infinite alternate;transition:height .3s}
-  @keyframes flick{from{transform:scaleY(1) scaleX(1)}to{transform:scaleY(1.18) scaleX(.9)}}
-  .smoke{position:absolute;top:-30px;left:50%;width:30px;height:30px;border-radius:50%;background:rgba(20,20,20,.55);opacity:0;filter:blur(4px);z-index:3}
-  .smoke.on{animation:smoke 1.4s ease-out infinite}
-  @keyframes smoke{0%{transform:translate(-50%,0) scale(.5);opacity:.6}100%{transform:translate(-50%,-70px) scale(1.6);opacity:0}}
-  .heat-meter{width:100%;max-width:320px;height:16px;border-radius:999px;position:relative;overflow:hidden;
-    background:linear-gradient(90deg,#2b6cb0 0%,#2b6cb0 28%,var(--verde) 38%,var(--verde) 72%,var(--ladrillo) 82%,#7a1e0c 100%);
-    border:1px solid rgba(236,187,79,.3);transition:box-shadow .2s}
-  .heat-meter.ok{box-shadow:0 0 0 2px var(--verde),0 0 18px rgba(122,154,64,.65)}
-  .heat-status{font-family:"Bevan",serif;font-size:clamp(17px,4.6vw,23px);text-align:center;line-height:1.12;
-    padding:9px 14px;border-radius:13px;margin-bottom:8px;letter-spacing:.3px;border:2px solid rgba(236,187,79,.2);
-    background:rgba(0,0,0,.25);color:var(--crema-dim);transition:.18s}
-  .heat-status.ok{color:#0d1a05;background:linear-gradient(180deg,#aed85f,#7a9a40);border-color:#d4e6a3;
-    box-shadow:0 0 24px rgba(122,154,64,.6);animation:okPulse 1s ease-in-out infinite}
-  .heat-status.low{color:#cfe6ff;background:rgba(43,108,176,.24);border-color:#3f7fb0}
-  .heat-status.high{color:#ffc1a0;background:rgba(178,58,30,.28);border-color:var(--ladrillo);animation:hiPulse .5s ease-in-out infinite}
+  /* L3 frying */
+  .pan-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;min-height:230px;position:relative}
+  .pan{width:230px;height:150px;position:relative;border-radius:50%;
+    background:radial-gradient(ellipse at 50% 40%, #4a4a4a, #1a1a1a);border:5px solid #0d0d0d;
+    box-shadow:inset 0 6px 16px rgba(0,0,0,.6), 0 14px 24px -8px #000;display:grid;place-items:center}
+  .pan::after{content:"";position:absolute;right:-70px;top:50%;width:70px;height:14px;background:#1a1a1a;border-radius:7px;transform:translateY(-50%)}
+  .pan .oil{width:160px;height:78px;border-radius:50%;background:radial-gradient(ellipse,rgba(244,182,22,.5),rgba(180,120,30,.35));position:absolute}
+  .pan .meat-fry{font-size:54px;z-index:2;filter:drop-shadow(0 3px 5px rgba(0,0,0,.4));transition:filter .4s}
+  .pan .meat-fry.raw{filter:brightness(1.2) saturate(.7)}
+  .pan .meat-fry.burnt{filter:brightness(.45) saturate(.6)}
+  .splash{position:absolute;width:6px;height:6px;border-radius:50%;background:rgba(244,200,120,.7);animation:splash .5s ease-out forwards}
+  @keyframes splash{0%{transform:translate(0,0) scale(.5);opacity:.9}100%{transform:translate(var(--dx),var(--dy)) scale(1);opacity:0}}
+  .doneness{width:100%;}
+  .done-status{font-family:"Bevan",serif;font-size:clamp(16px,4.4vw,22px);text-align:center;line-height:1.1;
+    padding:9px 14px;border-radius:13px;margin-bottom:8px;border:2px solid rgba(236,187,79,.2);background:rgba(0,0,0,.25);color:var(--crema-dim);transition:.18s}
+  .done-status.green{color:#0d1a05;background:linear-gradient(180deg,#aed85f,#7a9a40);border-color:#d4e6a3;box-shadow:0 0 24px rgba(122,154,64,.6);animation:okPulse 1s infinite}
+  .done-status.yellow{color:#3a2e08;background:linear-gradient(180deg,#f1d96a,#caa23e);border-color:#e6c33a}
+  .done-status.red{color:#fff;background:linear-gradient(180deg,#d85a3a,#b23a1e);border-color:#ff7a55;animation:hiPulse .5s infinite}
   @keyframes okPulse{50%{box-shadow:0 0 34px rgba(122,154,64,.95)}}
   @keyframes hiPulse{50%{box-shadow:0 0 22px rgba(178,58,30,.75)}}
-  .heat-knob{position:absolute;top:-4px;width:6px;height:24px;background:#fff;border-radius:3px;box-shadow:0 0 8px #fff,0 0 0 2px #2a1709;transition:left .25s}
-  .meters{display:flex;gap:14px;width:100%;max-width:340px}
-  .mlabel{font-size:11px;font-family:"DM Mono",monospace;letter-spacing:1px;text-transform:uppercase;color:var(--crema-dim);margin-bottom:4px;display:flex;justify-content:space-between}
-  .cook-ctrls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:6px}
-  .cook-ctrls .btn{padding:13px 18px;font-size:15px}
-  .order-list{display:flex;gap:7px;flex-wrap:wrap;justify-content:center}
-  .order-chip{padding:9px 13px;border-radius:11px;font-size:13px;font-weight:700;cursor:grab;touch-action:none;
-    background:linear-gradient(180deg,#6b4426,#432915);border:1.5px solid rgba(236,187,79,.25);color:var(--crema);transition:.15s;
-    display:flex;align-items:center;gap:6px}
-  .order-chip:active{cursor:grabbing}
-  .order-chip.dragging{opacity:.35}
-  .order-chip .vis{width:22px;height:22px;font-size:18px}
-  .order-chip:hover{transform:translateY(-2px)}
-  .order-chip:focus-visible{outline:none;box-shadow:var(--ring)}
-  .order-chip.done{background:linear-gradient(180deg,var(--verde),var(--verde-deep));border-color:var(--oro);pointer-events:none;opacity:.55}
-  .order-chip.wrong{animation:shake .4s}
-  #l3PhaseOrder{display:flex;flex-direction:column;flex:1;min-height:0}
-  .l3-drop{margin-top:16px;flex:1;min-height:200px;border-radius:22px;border:3px dashed rgba(236,187,79,.4);
+  .heat-meter{width:100%;height:16px;border-radius:999px;position:relative;overflow:hidden;
+    background:linear-gradient(90deg,var(--amarillo) 0%,var(--amarillo) 34%,var(--verde) 42%,var(--verde) 70%,var(--ladrillo) 80%,#7a1e0c 100%);border:1px solid rgba(236,187,79,.3)}
+  .heat-knob{position:absolute;top:-4px;width:6px;height:24px;background:#fff;border-radius:3px;box-shadow:0 0 8px #fff,0 0 0 2px #2a1709;transition:left .2s}
+  .mlabel{font-size:11px;font-family:"DM Mono",monospace;letter-spacing:1px;text-transform:uppercase;color:var(--crema-dim);margin:8px 0 4px;display:flex;justify-content:space-between}
+  .cook-ctrls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+  .l3-drop{flex:1;min-height:200px;border-radius:22px;border:3px dashed rgba(236,187,79,.4);margin-top:8px;
     background:radial-gradient(ellipse at 50% 130%, rgba(223,111,28,.2), rgba(0,0,0,.3));
-    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;transition:transform .15s, border-color .2s, background .2s;position:relative}
-  .l3-drop.over{border-color:var(--aji);background:radial-gradient(ellipse at 50% 130%, rgba(244,182,22,.34), rgba(0,0,0,.3));transform:scale(1.01)}
-  .l3-drop.shakeit{animation:shake .4s}
-  .l3-drop .l3-pot-mini{font-size:84px;filter:drop-shadow(0 8px 10px rgba(0,0,0,.5));transition:transform .15s}
-  .l3-drop.over .l3-pot-mini{transform:scale(1.14) translateY(-3px)}
-  .l3-drop-label{font-size:14px;color:var(--crema-dim);font-weight:700}
-  .next-hint{text-align:center;font-size:13px;color:var(--crema-dim);margin:10px 0}
-  .next-hint b{color:var(--aji-soft)}
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;transition:.15s;position:relative}
+  .l3-drop.over{border-color:var(--aji);transform:scale(1.01)}
+  .l3-drop .pan{transform:scale(.9)}
+  .l3-meat-src{margin-top:14px;display:flex;justify-content:center}
+  .meat-chip{padding:12px 16px;border-radius:15px;cursor:grab;touch-action:none;text-align:center;
+    background:linear-gradient(180deg,#6b4426,#43291590);border:1.5px solid rgba(236,187,79,.25);display:flex;flex-direction:column;align-items:center;gap:4px}
+  .meat-chip .vis{width:46px;height:46px;font-size:42px}
+  .meat-chip .fn{font-size:11px;color:var(--crema-dim);font-weight:600}
+  .meat-chip.used{opacity:.3;pointer-events:none}
 
-  /* L4 */
-  .plate-area{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:300px}
-  .plate{width:230px;height:230px;border-radius:50%;position:relative;
+  /* L4 five plates */
+  .plates-row{flex:1;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;align-content:center;min-height:200px}
+  .plate5{width:122px;height:122px;border-radius:50%;position:relative;
     background:radial-gradient(circle at 40% 35%, #fffaf0, var(--crema) 60%, #d9c39c 100%);
-    box-shadow:0 16px 30px -10px #000, inset 0 0 0 10px rgba(0,0,0,.04), inset 0 0 0 13px rgba(0,0,0,.05);
-    display:grid;place-items:center;transition:box-shadow .3s}
-  .plate.glow{box-shadow:0 0 50px rgba(244,182,22,.55),0 16px 30px -10px #000, inset 0 0 0 10px rgba(0,0,0,.04)}
-  .plate .drop-hint{color:#9a8a66;font-size:13px;font-weight:700;text-align:center;width:70%;line-height:1.4}
-  .plate-img{position:absolute;inset:6px;border-radius:50%;overflow:hidden;display:none;place-items:center}
-  .plate-img.on{display:grid}
-  .plate-img .vis{width:100%;height:100%}
-  .plate-img .vis img{object-fit:cover}
-  .placed{position:absolute;filter:drop-shadow(0 4px 5px rgba(0,0,0,.3));animation:pop .4s}
-  .placed.vis{width:48px;height:48px;font-size:44px}
-  .tray{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:18px}
-  .food-piece{width:84px;padding:10px 6px;border-radius:15px;cursor:grab;touch-action:none;text-align:center;
-    background:linear-gradient(180deg,#6b4426,#43291590);border:1.5px solid rgba(236,187,79,.25);
-    transition:transform .12s,opacity .3s;display:flex;flex-direction:column;align-items:center;gap:3px}
-  .food-piece .vis{width:38px;height:38px;font-size:34px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.4))}
-  .food-piece .fn{font-size:10.5px;color:var(--crema-dim);font-weight:600;line-height:1.15}
-  .food-piece:active{cursor:grabbing}
-  .food-piece.used{opacity:.3;pointer-events:none}
-  .food-piece:focus-visible{outline:none;box-shadow:var(--ring)}
+    box-shadow:0 10px 20px -8px #000, inset 0 0 0 7px rgba(0,0,0,.04);display:grid;place-items:center;transition:box-shadow .3s}
+  .plate5.done{box-shadow:0 0 26px rgba(122,154,64,.6),0 10px 20px -8px #000;}
+  .plate5 .slots{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;width:80%;place-items:center}
+  .plate5 .slot{width:26px;height:26px;display:grid;place-items:center;font-size:20px;opacity:0;transform:scale(.4);transition:.25s}
+  .plate5 .slot.on{opacity:1;transform:scale(1)}
+  .plate5 .slot .vis{width:24px;height:24px;font-size:20px}
+  .plate5 .pnum{position:absolute;top:-7px;left:-7px;width:22px;height:22px;border-radius:50%;background:var(--wood);border:1.5px solid var(--oro);
+    color:var(--aji);font-family:"DM Mono",monospace;font-size:11px;display:grid;place-items:center;font-weight:700}
+  .tray5{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+  .src5{width:74px;padding:9px 5px;border-radius:14px;cursor:grab;touch-action:none;text-align:center;
+    background:linear-gradient(180deg,#6b4426,#43291590);border:1.5px solid rgba(236,187,79,.25);display:flex;flex-direction:column;align-items:center;gap:3px}
+  .src5 .vis{width:34px;height:34px;font-size:30px}
+  .src5 .fn{font-size:9.5px;color:var(--crema-dim);font-weight:600;line-height:1.1}
+  .src5:active{cursor:grabbing}
   .drag-ghost{position:fixed;pointer-events:none;z-index:999;transform:translate(-50%,-50%);filter:drop-shadow(0 6px 8px rgba(0,0,0,.5))}
-  .drag-ghost .vis{width:56px;height:56px;font-size:54px}
+  .drag-ghost .vis{width:50px;height:50px;font-size:48px}
 
   /* OVERLAYS */
-  .overlay{position:absolute;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:24px;
-    background:
-      radial-gradient(circle at 50% 38%, #3a2010, #0c0602),
-      repeating-linear-gradient(92deg, #2c1a0d 0px, #301d0f 6px, #2a180c 12px, #311e10 18px)}
+  .overlay{position:absolute;inset:0;z-index:50;display:none;overflow-y:auto;padding:0;
+    background:radial-gradient(circle at 50% 38%, #3a2010, #0c0602),repeating-linear-gradient(92deg,#2c1a0d 0,#301d0f 6px,#2a180c 12px,#311e10 18px)}
   .overlay.active{display:flex;animation:fade .4s}
-  .card{max-width:440px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px}
-  .badge-big{width:120px;height:120px;border-radius:50%;display:grid;place-items:center;font-size:54px;position:relative;overflow:hidden;
-    background:radial-gradient(circle at 38% 30%, var(--aji-soft), var(--naranja) 70%, #9a4e12);
-    border:4px solid var(--oro);box-shadow:0 0 40px rgba(244,182,22,.6),inset 0 -6px 14px rgba(0,0,0,.35);
-    animation:badgePop .7s cubic-bezier(.2,1.4,.4,1)}
-  .badge-big .vis{width:76px;height:76px;font-size:54px}
+  .card{max-width:440px;margin:auto;padding:22px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px}
+  #ovFinal .card{gap:10px;padding:18px}
+  #ovFinal .final-plate .vis{width:88px;height:88px;font-size:80px}
+  #ovFinal .unlock{font-size:clamp(20px,5vw,30px)}
+  .badge-big{width:116px;height:116px;border-radius:50%;display:grid;place-items:center;position:relative;overflow:hidden;
+    background:radial-gradient(circle at 38% 30%, var(--aji-soft), var(--naranja) 70%, #9a4e12);border:4px solid var(--oro);
+    box-shadow:0 0 40px rgba(244,182,22,.6),inset 0 -6px 14px rgba(0,0,0,.35);animation:badgePop .7s cubic-bezier(.2,1.4,.4,1)}
+  .badge-big .vis{width:72px;height:72px;font-size:52px}
   .badge-big::before{content:"";position:absolute;inset:-14px;border-radius:50%;border:2px dashed rgba(236,187,79,.4);animation:spin 14s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
   @keyframes badgePop{0%{transform:scale(0) rotate(-40deg);opacity:0}100%{transform:scale(1) rotate(0);opacity:1}}
-  .badge-name{font-family:"Bevan",serif;font-size:22px;color:var(--aji);letter-spacing:.3px}
-  .culture{font-size:14px;line-height:1.6;color:var(--crema-dim);font-style:italic;
-    border-left:3px solid var(--naranja);text-align:left;max-width:42ch;
+  .badge-name{font-family:"Bevan",serif;font-size:21px;color:var(--aji)}
+  .pts-pop{font-family:"DM Mono",monospace;font-weight:700;color:var(--verde);font-size:18px}
+  .culture{font-size:14px;line-height:1.6;color:var(--crema-dim);font-style:italic;border-left:3px solid var(--naranja);text-align:left;max-width:42ch;
     background:rgba(0,0,0,.18);border-radius:0 10px 10px 0;padding:12px 14px}
   .culture::before{content:"❝";color:var(--naranja);font-size:22px;font-family:"Bevan",serif;margin-right:4px;line-height:0}
 
+  /* NARRATOR */
+  #ovNarrator{cursor:pointer;flex-direction:column;justify-content:flex-end;padding:0}
+  .dlg-scene{position:absolute;inset:0;display:grid;place-items:center;font-size:140px;opacity:.5;}
+  .dlg-scene .vis{width: auto !important;height: 80vh !important;font-size:150px}
+  .dlg-wrap{position:relative;z-index:2;width:100%;max-width:760px;margin:0 auto;display:flex;align-items:flex-end;gap:10px;padding:22px}
+  .dlg-char{flex:0 0 auto}
+  .dlg-char .vis{width:auto !important;height:40vh !important;font-size:84px;filter:drop-shadow(0 6px 10px rgba(0,0,0,.6))}
+  .dlg-box{flex:1;background:linear-gradient(180deg, rgba(40,24,12,.97), rgba(28,16,8,.98));border:2px solid var(--oro);
+    border-radius:18px;padding:16px 18px;box-shadow:0 16px 30px -10px #000;position:relative}
+  .dlg-name{font-family:"Bevan",serif;color:var(--aji);font-size:16px;margin-bottom:6px}
+  .dlg-text{font-size:15px;line-height:1.55;color:var(--crema)}
+  .dlg-next{margin-top:10px;font-size:12px;color:var(--aji-soft);font-weight:700;text-align:right;animation:blink 1.1s infinite}
+  @keyframes blink{50%{opacity:.4}}
+
+  /* FINAL + ranking */
   .final-plate{display:grid;place-items:center;filter:drop-shadow(0 12px 16px rgba(0,0,0,.5));animation:floaty 3s ease-in-out infinite}
-  .final-plate .vis{width:130px;height:130px;font-size:120px}
+  .final-plate .vis{width:auto !important;height:30vh !important;font-size:110px}
   @keyframes floaty{50%{transform:translateY(-10px)}}
   .unlock{font-family:"Bevan",serif;font-size:clamp(22px,5.5vw,34px);line-height:1.05;
-    background:linear-gradient(90deg,var(--aji-soft),var(--naranja),var(--aji-soft));
-    -webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 30px rgba(244,182,22,.3);letter-spacing:.5px}
-  .rank{background:rgba(0,0,0,.3);border:1px solid rgba(236,187,79,.3);border-radius:14px;padding:14px 18px;font-size:14px;color:var(--crema);display:flex;align-items:center;gap:10px}
-  .rank b{font-family:"DM Mono",monospace;color:var(--aji);font-size:20px}
-  .final-badges{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-  .fb{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font-size:24px;overflow:hidden;
+    background:linear-gradient(90deg,var(--aji-soft),var(--naranja),var(--aji-soft));-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 30px rgba(244,182,22,.3)}
+  .rank-line{background:rgba(0,0,0,.3);border:1px solid rgba(236,187,79,.3);border-radius:14px;padding:12px 16px;font-size:14px;color:var(--crema);display:flex;align-items:center;gap:10px}
+  .rank-line b{font-family:"DM Mono",monospace;color:var(--aji);font-size:18px}
+  .name-form{display:flex;gap:8px;width:100%;max-width:340px}
+  .name-form input{flex:1;background:rgba(0,0,0,.3);border:1.5px solid rgba(236,187,79,.35);border-radius:12px;padding:11px 14px;color:var(--crema);font-size:15px;font-family:"DM Sans"}
+  .name-form input:focus{outline:none;box-shadow:var(--ring)}
+  .final-badges{display:flex;gap:9px;flex-wrap:wrap;justify-content:center}
+  .fb{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;overflow:hidden;
     background:radial-gradient(circle at 38% 30%, var(--aji-soft), var(--naranja));border:2px solid var(--oro);box-shadow:0 0 16px rgba(244,182,22,.5)}
-  .fb .vis{width:34px;height:34px;font-size:24px}
+  .fb .vis{width:32px;height:32px;font-size:22px}
 
   .fx{position:absolute;pointer-events:none;z-index:60;font-size:18px;animation:fall linear forwards}
-  @keyframes fall{0%{transform:translateY(-10px) rotate(0);opacity:1}100%{transform:translateY(420px) rotate(360deg);opacity:0}}
+  @keyframes fall{0%{transform:translateY(-10px) rotate(0);opacity:1}100%{transform:translateY(460px) rotate(360deg);opacity:0}}
   .spark{position:fixed;pointer-events:none;color:var(--oro);z-index:55;animation:sparkUp .8s ease-out forwards;font-size:16px}
   @keyframes sparkUp{0%{transform:translateY(0) scale(.4);opacity:1}100%{transform:translateY(-46px) scale(1.2);opacity:0}}
-  .steam{position:absolute;bottom:0;width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.12);filter:blur(3px);animation:steamUp 4s ease-in infinite}
-  @keyframes steamUp{0%{transform:translateY(0) scale(.6);opacity:0}30%{opacity:.5}100%{transform:translateY(-160px) scale(1.6);opacity:0}}
   .hidden{display:none!important}
 
   @media (max-width:560px){
-    #app{padding:0}
-    .stage{border-radius:0;max-height:none;border-left:none;border-right:none}
-    .l2-item .vis{width:96px;height:96px;font-size:74px}
-    .pot{width:160px;height:124px}
-    .plate{width:200px;height:200px}
+    .plate5{width:92px;height:92px}
+    .meat .vis{font-size:70px}
+    .dlg-char .vis{width:70px;height:70px;font-size:60px}
   }
-  @media (prefers-reduced-motion:reduce){ *{animation-duration:.001s!important;transition-duration:.05s!important} }
+  @media (prefers-reduced-motion:reduce){*{animation-duration:.001s!important;transition-duration:.05s!important}}
 </style>
 </head>
 <body>
-<div id="app">
-  <div class="stage">
-    <div class="hud">
-      <div class="brand">EL FRITO<b>PIURANO</b></div>
-      <div class="spacer"></div>
-      <div class="badges-mini" id="badgesMini"></div>
+<div id="app"><div class="stage">
+
+  <div class="hud">
+    <div class="brand">EL FRITO</div>
+    <div class="points"><div class="points-bar"><div class="points-fill" id="ptsFill"></div></div><span class="points-txt" id="ptsTxt">0/20</span></div>
+    <div class="rank-badge">Rango: <b id="rankTxt">Aprendiz</b></div>
+    <div class="hud-btns">
       <button class="icon-btn" id="fsBtn" aria-label="Pantalla completa" title="Pantalla completa">⛶</button>
       <button class="icon-btn" id="muteBtn" aria-label="Silenciar sonido" title="Sonido">🔊</button>
     </div>
+  </div>
 
-    <div class="screens" id="screens">
-      <!-- START -->
-      <section class="scr active" id="scr-start">
-        <div class="center-col">
-          <div class="lvl-tag">Cocina tradicional · Bajo Piura</div>
-          <h1 class="title">Maestro del<br>Sabor Piurano</h1>
-          <p class="lead">Conviértete en cocinero del legendario <b style="color:var(--aji-soft)">frito piurano</b>. Cuatro niveles, del mercado al emplatado, donde la tradición se gana a pulso.</p>
-          <div style="display:flex;gap:14px;margin:18px 0;flex-wrap:wrap;justify-content:center;font-size:12px;color:var(--crema-dim)">
-            <span><span data-ui="stepMarket" data-size="16"></span> Escoge</span><span><span data-ui="stepPrep" data-size="16"></span> Prepara</span><span><span data-ui="stepCook" data-size="16"></span> Cocina</span><span><span data-ui="stepServe" data-size="16"></span> Sirve</span>
-          </div>
-          <button class="btn" id="startBtn">Entrar a la cocina</button>
-        </div>
-        <div id="startSteam"></div>
-      </section>
+  <div class="screens" id="screens">
 
-      <!-- L1 -->
-      <section class="scr" id="scr-l1">
-        <div class="lvl-tag">Nivel 1 · El mercado</div>
-        <h2 class="title">Escoge los ingredientes</h2>
-        <div class="play-top"><div class="timer" id="l1Timer">⏱ 0:45</div><div class="bar-wrap"><div class="bar-fill" id="l1Bar"></div></div></div>
-        <p class="instr">El mercado <b>gira</b>: toca solo lo que lleva el <b>frito piurano</b>. Aciertas y brilla en oro; te equivocas y pierdes <b>5 segundos</b>.</p>
-        <div class="l1-stage">
-          <div class="l1-ring-wrap">
-            <div class="l1-ring" id="l1Ring"></div>
-            <div class="l1-center"><span data-ui="basket" data-size="34"></span><small>Faltan <span id="l1Count">8</span></small></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- L2 -->
-      <section class="scr" id="scr-l2">
-        <div class="lvl-tag">Nivel 2 · El fogón</div>
-        <h2 class="title">Prepara los condimentos</h2>
-        <div class="play-top"><div class="timer" id="l2Timer">⏱ 1:00</div><div class="bar-wrap"><div class="bar-fill" id="l2Bar"></div></div></div>
-        <div class="l2-steps" id="l2Steps"></div>
-        <p class="instr" id="l2Instr">Mantén presionado y desliza sobre la tabla. <b>Sin apuro</b>: si vas muy rápido, sale mal picado.</p>
-        <div class="l2-board" id="l2Board">
-          <div class="l2-prog" id="l2Prog"></div>
-          <div class="l2-toast" id="l2Toast">¡Muy rápido!</div>
-          <div class="l2-item" id="l2Item"></div>
-          <div class="l2-guide" id="l2Guide"></div>
-          <div class="knife" id="l2Knife" data-ui="knife" data-size="46"></div>
-          <div class="l2-hint" id="l2BoardHint">Desliza para pelar</div>
-        </div>
-      </section>
-
-      <!-- L3 -->
-      <section class="scr" id="scr-l3">
-        <div class="lvl-tag">Nivel 3 · La olla</div>
-        <h2 class="title">Cocina el frito</h2>
-        <div class="play-top"><div class="timer" id="l3Timer">🔥 Cocción</div><div class="bar-wrap"><div class="bar-fill" id="l3DoneBar" style="width:0"></div></div></div>
-        <div id="l3PhaseOrder">
-          <p class="instr">Arrastra cada ingrediente <b>en el orden correcto</b> hacia la olla de abajo.</p>
-          <div class="next-hint">Siguiente: <b id="l3NextName">Aceite</b></div>
-          <div class="order-list" id="l3Order"></div>
-          <div class="l3-drop" id="l3Drop">
-            <div class="l3-pot-mini" data-ui="pot" data-size="84"></div>
-            <span class="l3-drop-label">Suelta aquí, en orden</span>
-          </div>
-        </div>
-        <div id="l3PhaseCook" class="hidden" style="flex:1;display:flex;flex-direction:column">
-          <div class="pot-wrap">
-            <div class="pot">
-              <div class="smoke" id="l3Smoke"></div>
-              <div class="food" id="l3Food"></div>
-              <div class="food-img" id="l3FoodImg"></div>
-              <div class="flames" id="l3Flames"></div>
-            </div>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:8px;align-items:center">
-            <div style="width:100%;max-width:360px">
-              <div class="heat-status" id="l3Status">Mantén el fuego en la zona verde</div>
-              <div class="mlabel"><span>🔥 Fuego</span><span id="l3HeatTxt">medio</span></div>
-              <div class="heat-meter" id="l3Meter"><div class="heat-knob" id="l3Knob" style="left:50%"></div></div>
-            </div>
-            <div class="meters">
-              <div style="flex:1"><div class="mlabel"><span>Cocción</span><span id="l3DoneTxt">0%</span></div>
-                <div class="bar-wrap"><div class="bar-fill" id="l3Done2" style="width:0;background:linear-gradient(90deg,var(--verde),var(--aji))"></div></div></div>
-              <div style="flex:1"><div class="mlabel"><span>Quemado</span><span id="l3BurnTxt">0%</span></div>
-                <div class="bar-wrap"><div class="bar-fill" id="l3Burn" style="width:0;background:linear-gradient(90deg,#caa23e,var(--ladrillo))"></div></div></div>
-            </div>
-            <div class="cook-ctrls">
-              <button class="btn" id="l3Up"><span data-ui="fireUp" data-size="18"></span> Subir fuego</button>
-              <button class="btn ghost" id="l3Stir"><span data-ui="spoon" data-size="18"></span> Remover</button>
-              <button class="btn" id="l3Down"><span data-ui="fireDown" data-size="18"></span> Bajar fuego</button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- L4 -->
-      <section class="scr" id="scr-l4">
-        <div class="lvl-tag">Nivel 4 · La mesa</div>
-        <h2 class="title">Sirve el plato</h2>
-        <div class="play-top"><div class="timer" id="l4Timer">🚶 0:30</div><div class="bar-wrap"><div class="bar-fill" id="l4Bar"></div></div></div>
-        <p class="instr">Arrastra cada componente al plato <b>antes de que llegue el cliente</b>. Empieza por el frito.</p>
-        <div class="plate-area">
-          <div class="plate" id="l4Plate">
-            <div class="plate-img" id="l4PlateImg"></div>
-            <div class="drop-hint" id="l4Hint">Arrastra aquí el frito, la yuca, la salsa criolla y los chifles</div>
-          </div>
-          <div class="tray" id="l4Tray"></div>
-        </div>
-      </section>
-    </div>
-
-    <!-- OVERLAYS -->
-    <div class="overlay" id="ovIntro"><div class="card">
-      <div class="lvl-tag" id="ovIntroTag">Nivel</div>
-      <h2 class="title" id="ovIntroTitle"></h2>
-      <p class="lead" id="ovIntroText" style="text-align:center"></p>
-      <button class="btn" id="ovIntroBtn">Comenzar</button>
-    </div></div>
-
-    <div class="overlay" id="ovReward"><div class="card">
-      <div class="badge-big" id="ovBadgeIcon"></div>
-      <div class="badge-name" id="ovBadgeName">Insignia</div>
-      <div class="culture" id="ovCulture"></div>
-      <button class="btn" id="ovRewardBtn">Continuar</button>
-    </div></div>
-
-    <div class="overlay" id="ovFail"><div class="card">
-      <div data-ui="fail" data-size="54" style="display:grid;place-items:center"></div>
-      <h2 class="title">Se te pasó el tiempo</h2>
-      <p class="lead" id="ovFailText" style="text-align:center"></p>
-      <button class="btn" id="ovFailBtn">Reintentar nivel</button>
-    </div></div>
-
-    <div class="overlay" id="ovFinal"><div class="card">
-      <div class="final-plate" id="finalPlate"></div>
-      <div class="lvl-tag" style="justify-content:center">Título desbloqueado</div>
-      <div class="unlock">Maestro del<br>Sabor Piurano</div>
-      <div class="final-badges" id="finalBadges"></div>
-      <div class="rank"><span data-ui="trophy" data-size="22"></span><span>Has cocinado mejor que el <b>85%</b> de los jugadores esta semana</span></div>
-      <p class="culture" id="finalCulture" style="font-style:italic"></p>
-      <div class="btn-row" style="justify-content:center">
-        <button class="btn" id="finalReplay">Cocinar de nuevo</button>
+    <!-- START -->
+    <section class="scr active" id="scr-start">
+      <div class="center-col">
+        <div class="lvl-tag">Cocina tradicional · La Unión, Piura</div>
+        <h1 class="title">Maestro del<br>Sabor Piurano</h1>
+        <p class="lead">Aprende a preparar el auténtico <b style="color:var(--aji-soft)">frito piurano</b> junto a <b style="color:var(--aji-soft)">Doña Peto</b>. Cuatro niveles, 20 puntos y una tradición que mantener viva.</p>
+        <button class="btn" id="startBtn" style="margin-top:18px">Entrar a la cocina</button>
       </div>
-    </div></div>
+    </section>
+
+    <!-- L1 -->
+    <section class="scr" id="scr-l1">
+      <div class="lvl-tag">Nivel 1 · El mercado</div>
+      <h2 class="title">Escoge los ingredientes</h2>
+      <div class="play-top"><div class="timer" id="l1Timer">⏱ 0:45</div><div class="bar-wrap"><div class="bar-fill" id="l1Bar"></div></div></div>
+      <p class="instr">El mercado <b>gira</b>: toca solo lo del frito piurano. Cada error te quita <b>3 s</b>.</p>
+      <div class="l1-stage"><div class="l1-ring-wrap"><div class="l1-ring" id="l1Ring"></div>
+        <div class="l1-center"><span data-ui="basket" data-size="32"></span><small>Faltan <span id="l1Count">11</span></small></div></div></div>
+    </section>
+
+    <!-- L2 -->
+    <section class="scr" id="scr-l2">
+      <div class="lvl-tag">Nivel 2 · La tabla</div>
+      <h2 class="title">Cuchillo afilado</h2>
+      <div class="play-top"><div class="timer" id="l2Timer">⏱ 0:35</div><div class="bar-wrap"><div class="bar-fill" id="l2Bar"></div></div>
+        <div class="counter-chip">Cortes <b id="l2Cuts">0/10</b></div>
+        <div class="counter-chip">Grasa <b id="l2Fat">0/3</b></div></div>
+      <p class="instr">Desliza <b>hacia abajo</b> sobre cada línea para cortar (10 trozos parejos) y toca la <b>grasa</b> para retirarla. Cortes mal puestos: <b>−3 s</b>.</p>
+      <div class="meat-board" id="meatBoard">
+        <div class="meat" id="meatEl"></div>
+        <div class="knife-fx" id="l2Knife">🔪</div>
+        <div class="board-toast" id="l2Toast">¡Corte incorrecto!</div>
+      </div>
+    </section>
+
+    <!-- L3 -->
+    <section class="scr" id="scr-l3">
+      <div class="lvl-tag">Nivel 3 · La sartén</div>
+      <h2 class="title">Fríe la carne</h2>
+      <div class="play-top"><div class="timer" id="l3Timer">⏱ 1:00</div><div class="bar-wrap"><div class="bar-fill" id="l3Bar"></div></div>
+        <div class="counter-chip">En verde <b id="l3Green">0/30 s</b></div></div>
+
+      <div id="l3PhaseDrop">
+        <p class="instr">Arrastra la carne a la <b>sartén</b> para empezar a freír.</p>
+        <div class="l3-drop" id="l3Drop"><div class="pan"><div class="oil"></div></div><span style="font-size:13px;color:var(--crema-dim);font-weight:700">Suelta la carne aquí</span></div>
+        <div class="l3-meat-src"><button class="meat-chip" id="l3MeatSrc" type="button"><span class="mholder"></span><span class="fn">Carne sin freír</span></button></div>
+      </div>
+
+      <div id="l3PhaseFry" class="hidden" style="flex:1;display:flex;flex-direction:column">
+        <div class="pan-wrap"><div class="pan"><div class="oil"></div><div class="meat-fry" id="l3MeatFry">🥩</div></div></div>
+        <div class="doneness">
+          <div class="done-status" id="l3Status">Mantén la carne en el punto verde</div>
+          <div class="mlabel"><span>🔥 Fuego</span><span id="l3HeatTxt">medio</span></div>
+          <div class="heat-meter"><div class="heat-knob" id="l3Knob" style="left:50%"></div></div>
+          <div class="mlabel"><span>Cocción en verde</span><span id="l3GreenTxt">0/30 s</span></div>
+          <div class="bar-wrap"><div class="bar-fill" id="l3GreenBar" style="width:0;background:linear-gradient(90deg,var(--verde),var(--aji))"></div></div>
+          <div class="cook-ctrls">
+            <button class="btn" id="l3Up"><span data-ui="fireUp" data-size="18"></span> Subir fuego</button>
+            <button class="btn" id="l3Down"><span data-ui="fireDown" data-size="18"></span> Bajar fuego</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- L4 -->
+    <section class="scr" id="scr-l4">
+      <div class="lvl-tag">Nivel 4 · La mesa</div>
+      <h2 class="title">Sirve el desayuno</h2>
+      <div class="play-top"><div class="timer" id="l4Timer">🚶 0:35</div><div class="bar-wrap"><div class="bar-fill" id="l4Bar"></div></div>
+        <div class="counter-chip">Platos <b id="l4Done">0/5</b></div></div>
+      <p class="instr">Arrastra los 5 ingredientes a cada plato (sin repetir). Ingrediente repetido: <b>−5 s</b>. Empieza a llegar la gente.</p>
+      <div class="plates-row" id="platesRow"></div>
+      <div class="tray5" id="tray5"></div>
+    </section>
 
   </div>
-</div>
+
+  <!-- OVERLAYS -->
+  <div class="overlay" id="ovNarrator"><div class="dlg-scene" id="dlgScene"></div>
+    <div class="dlg-wrap"><div class="dlg-char" id="dlgChar"></div>
+      <div class="dlg-box"><div class="dlg-name" id="dlgName">Doña Peto</div><div class="dlg-text" id="dlgText"></div><div class="dlg-next">Toca para continuar ▸</div></div></div>
+  </div>
+
+  <div class="overlay" id="ovReward"><div class="card">
+    <div class="badge-big" id="ovBadgeIcon"></div>
+    <div class="badge-name" id="ovBadgeName">Insignia</div>
+    <div class="pts-pop" id="ovPts">+5 puntos</div>
+    <div class="culture" id="ovCulture"></div>
+    <button class="btn" id="ovRewardBtn">Continuar</button>
+  </div></div>
+
+  <div class="overlay" id="ovFail"><div class="card">
+    <div data-ui="fail" data-size="54" style="display:grid;place-items:center"></div>
+    <h2 class="title" id="ovFailTitle">Inténtalo de nuevo</h2>
+    <p class="lead" id="ovFailText" style="text-align:center"></p>
+    <button class="btn" id="ovFailBtn">Reintentar nivel</button>
+  </div></div>
+
+  <div class="overlay" id="ovFinal"><div class="card">
+    <div class="final-plate" id="finalPlate"></div>
+    <div class="lvl-tag" style="justify-content:center">Título desbloqueado · 20/20</div>
+    <div class="unlock">Maestro del<br>Sabor Piurano</div>
+    <div class="final-badges" id="finalBadges"></div>
+    <div id="finalNameStep">
+      <p class="lead" id="finalTime" style="text-align:center;margin:6px 0"></p>
+      <div class="name-form"><input id="finalName" type="text" maxlength="20" placeholder="Tu nombre para el ranking" autocomplete="off"><button class="btn" id="finalSubmit">Guardar</button></div>
+    </div>
+    <div class="rank-line hidden" id="finalRankLine"><span data-ui="trophy" data-size="22"></span><span id="finalRankTxt"></span></div>
+    <div class="hidden" id="finalRankTable" style="width:100%;display:flex;flex-direction:column;align-items:center"></div>
+    <p class="culture" id="finalCulture" style="font-style:italic"></p>
+    <button class="btn ghost hidden" id="finalReplay">Cocinar de nuevo</button>
+  </div></div>
+
+</div></div>
 
 <script>
 "use strict";
 /* ════════════════════════════════════════════════════════════════════════
-   ███  CONFIGURACIÓN DE IMÁENES (EDITA AQUÍ)  ███
-   ────────────────────────────────────────────────────────────────────────
-   Todo lo visual sale de este objeto. Para cambiar un emoji por una imagen,
-   pon el nombre del archivo en "img". Si "img" es null, se muestra el emoji
-   (así el juego funciona sin imágenes).
-
-   • base / ext: carpeta y extensión por defecto. "ajo" -> "assets/ajo.png"
-   • Puedes poner: "ajo"  |  "ajo.webp"  |  "img/ajo.png"  |  "https://..."  |  "data:..."
-   • Si una imagen no carga, cae automáticamente al emoji.
-
-   SECUENCIAS PROGRESIVAS (cambian la imagen según el avance):
-   • sequences.pelar/cortar/picar/mezclar  -> Nivel 2, avanza con la barra.
-   • sequences.cocina                       -> Nivel 3, avanza con la cocción
-                                               (frame 0 = crudo ... último = listo).
-   • sequences.plato                        -> Nivel 4, AL SERVIR: avanza cada
-                                               vez que colocas un componente.
-        Ejemplo de lo que pediste:
-        plato: ['plato_preparado_1','plato_preparado_2','plato_preparado_3',
-                'plato_preparado_4','plato_preparado_5']
-        (índice 0 = plato vacío; luego una imagen por componente colocado)
-
-   También puedes sobreescribir todo en tiempo de ejecución con
-   window.__GAME_ASSETS__ antes de iniciar.
+   ███ CONFIGURACIÓN DE IMÁGENES / MÚSICA / RANKING (EDITA AQUÍ) ███
+   Cada elemento tiene {name, emoji, img}. Pon la ruta en "img" para usar imagen;
+   si img es null se usa el emoji. Si una imagen falla, cae al emoji.
    ════════════════════════════════════════════════════════════════════════ */
 const ASSETS = {
-  base: 'src/img/',
-  ext:  '.webp',
+  base: 'src/img/', ext: '.webp',
 
-  // ---- Nivel 1 + Nivel 3 (ingredientes) ----  {name, emoji, img}
+  narrator: { name:'Doña Peto', emoji:'👩🏽‍🍳', img:"peto.webp" },
+  scene:    { emoji:'🌄', img:"inicio.webp" },   // ilustración de La Unión al amanecer (fondo de los diálogos)
+
+  // Nivel 1 — ingredientes  (correctos + incorrectos)
   ingredients: {
-    cerdo:    { name:'Carne de cerdo', emoji:'🥩', img:"cerdo.webp" },
-    ajo:      { name:'Ajo',            emoji:'🧄', img:"ajo.webp" },
-    cebolla:  { name:'Cebolla',        emoji:'🧅', img:"cebolla.webp" },
-    aji:      { name:'Ají amarillo',   emoji:'🌶️', img:"aji.webp" },
-    chicha:   { name:'Chicha de jora', emoji:'🍺', img:"chicha.webp" },
-    yuca:     { name:'Yuca',           emoji:'🥔', img:"yuca.webp" },
-    limon:    { name:'Limón',          emoji:'🍋', img:"limon.webp" },
-    culantro: { name:'Culantro',       emoji:'🌿', img:"culantro.webp" },
-    aceite:   { name:'Aceite',         emoji:'🫗', img:"aceite.webp" },
-    // incorrectos del nivel 1
-    pimiento: { name:'Pimiento',       emoji:'🫑', img:"pimiento.webp" },
-    menestra: { name:'Menestra',       emoji:'🫘', img:"menestra.webp" },
-    pescado:  { name:'Pescado',        emoji:'🐟', img:"pescado.webp" },
-    caldo:    { name:'Caldo de pollo', emoji:'🍲', img:"caldo.webp" },
-    fideos:   { name:'Fideos',         emoji:'🍜', img:"fideos.webp" },
-    lechuga:  { name:'Lechuga',        emoji:'🥬', img:"lechuga.webp" },
+    cerdo:   { name:'Carne de cerdo', emoji:'🥩', img:"cerdo.webp" },
+    ajo:     { name:'Ajo',            emoji:'🧄', img:"ajo.webp" },
+    cebolla: { name:'Cebolla',        emoji:'🧅', img:"cebolla.webp" },
+    aji:     { name:'Ají amarillo',   emoji:'🌶️', img:"aji.webp" },
+    camote:  { name:'Camote',         emoji:'🍠', img:"camote.webp" },
+    chicha:  { name:'Chicha de jora', emoji:'🍺', img:"chicha.webp" },
+    arroz:   { name:'Arroz',          emoji:'🍚', img:"arroz.webp" },
+    aceite:  { name:'Aceite',         emoji:'🫗', img:"aceite.webp" },
+    platano: { name:'Plátano',        emoji:'🍌', img:"platano.webp" },
+    tamal:   { name:'Tamales',        emoji:'🫔', img:"tamal.webp" },
+    achiote: { name:'Achiote',        emoji:'🫙', img:"achiote.webp" },
+    // incorrectos
+    pimiento:{ name:'Pimiento',       emoji:'🫑', img:"pimiento.webp" },
+    menestra:{ name:'Menestra',       emoji:'🫘', img:"menestra.webp" },
+    pescado: { name:'Pescado',        emoji:'🐟', img:"pescado.webp" },
+    limon:   { name:'Limón',          emoji:'🍋', img:"limon.webp" },
+    yuca:    { name:'Yuca',           emoji:'🥔', img:"yuca.webp" },
+    culantro:{ name:'Culantro',       emoji:'🌿', img:"culantro.webp" },
   },
 
-  // ---- Nivel 4 (piezas para servir) ----
+  // Nivel 4 — componentes del plato (los 5)
   pieces: {
-    frito:   { name:'Frito',         emoji:'🥩', img:null },
-    yuca:    { name:'Yuca',          emoji:'🥔', img:null },
-    salsa:   { name:'Salsa criolla', emoji:'🧅', img:null },
-    chifles: { name:'Chifles',       emoji:'🍌', img:null },
+    arroz:  { name:'Arroz',  emoji:'🍚', img:null },
+    carne:  { name:'Carne',  emoji:'🥩', img:null },
+    camote: { name:'Camote', emoji:'🍠', img:null },
+    platano:{ name:'Plátano',emoji:'🍌', img:null },
+    tamal:  { name:'Tamal',  emoji:'🫔', img:null },
   },
 
-  // ---- Insignias y plato final ----
   badges: [
     { name:'Conocedor del mercado', emoji:'🛒', img:null },
-    { name:'Manos del fogón',       emoji:'🔪', img:null },
+    { name:'Experto en el corte',   emoji:'🔪', img:null },
     { name:'Guardián del sabor',    emoji:'🛡️', img:null },
     { name:'Embajador del plato',   emoji:'🍽️', img:null },
   ],
   finalPlate: { name:'Frito piurano servido', emoji:'🍽️', img:"final.webp" },
 
-  // ---- Música de FONDO de todo el juego ----
-  // Suena en bucle desde que entras a la cocina hasta el final.
-  // Prioridad: mp3 > youtube > melodía sintetizada.
-  //  - mp3: ruta o URL a un archivo de audio (.mp3, .ogg, .m4a). Ej: 'src/fondo.mp3' o 'https://.../x.mp3'
-  //  - youtube: link o ID de YouTube (requiere servir por http(s); no funciona en file://)
-  //  - volume: 0 a 1
-  music: { mp3: "src/fondo.mp3", youtube: null, volume: 0.1 },
+  // ---- Imágenes de la carne (cámbialas por las tuyas) ----
+  // cortada -> Nivel 2 (la carne sobre la tabla). cruda -> Nivel 3 antes de freír.
+  // frita   -> Nivel 3 cuando ya está cocida.
+  meat: {
+    cortada: { name:'Carne cortada',  emoji:'🥩', img:null },
+    cruda:   { name:'Carne sin freír', emoji:'🥩', img:null },
+    frita:   { name:'Carne frita',    emoji:'🥩', img:null },
+  },
 
-  // ---- Íconos de interfaz (cámbialos por imágenes igual que el resto) ----
+  // Íconos de interfaz
   ui: {
-    basket:    { emoji:'🧺', img:null },  // canasta (centro del nivel 1)
-    pot:       { emoji:'🍲', img:null },  // olla (zona de arrastre del nivel 3)
-    knife:     { emoji:'🔪', img:null },  // cuchillo (nivel 2)
-    bowl:      { emoji:'🥣', img:null },  // recipiente del aderezo (paso "mezclar")
-    spoon:     { emoji:'🥄', img:null },  // botón remover (nivel 3)
-    fireUp:    { emoji:'🔥', img:null },  // botón subir fuego
-    fireDown:  { emoji:'💨', img:null },  // botón bajar fuego
-    trophy:    { emoji:'🏆', img:null },  // ranking final
-    fail:      { emoji:'😅', img:null },  // pantalla de "se acabó el tiempo"
-    stepMarket:{ emoji:'🛒', img:null },  // menú inicio: escoger
-    stepPrep:  { emoji:'🔪', img:null },  // menú inicio: preparar
-    stepCook:  { emoji:'🔥', img:null },  // menú inicio: cocinar
-    stepServe: { emoji:'🍽️', img:null },  // menú inicio: servir
+    basket:  { emoji:'🧺', img:null }, knife:{ emoji:'🔪', img:null }, fat:{ emoji:'🫧', img:null },
+    fireUp:  { emoji:'🔥', img:null }, fireDown:{ emoji:'💨', img:null },
+    trophy:  { emoji:'🏆', img:null }, fail:{ emoji:'😅', img:null },
   },
 
-  // ---- Secuencias progresivas (listas de archivos; vacías = usa el emoji/CSS) ----
-  sequences: {
-    pelar:   ["ajo_0.webp","ajo_1.webp","ajo_2.webp"],   // ej: ['ajo_1','ajo_2','ajo_3']
-    cortar:  ["cebolla_0.webp","cebolla_1.webp","cebolla_2.webp","cebolla_3.webp","cebolla_4.webp","cebolla_5.webp"],   // ej: ['cebolla_1','cebolla_2','cebolla_3']
-    picar:   [],   // ej: ['aji_1','aji_2','aji_3']
-    mezclar: [],   // ej: ['aderezo_1','aderezo_2','aderezo_3']
-    cocina:  [],   // ej: ['olla_1','olla_2','olla_3','olla_4'] (crudo -> listo)
-    plato:   [],   // ej: ['plato_preparado_1', ... ] (vacío -> plato completo)
-  },
+  // Secuencias progresivas (vacías = usa emoji/CSS). Ej de corte: ['cerdo_0','cerdo_1',...'cerdo_10']
+  sequences: { corte:[], coccionFinal:["cerdo_cocinado.webp"] },
 
-  // ---- Tamaño (alto) de los items grandes del Nivel 2, en vh ----
-  // Cambia el tamaño del ajo/cebolla/ají/aderezo que se cortan en la tabla.
-  // Es el alto en unidades vh (1vh = 1% del alto de la pantalla). Pon null para usar el tamaño por defecto.
-  l2ItemSize: {
-    pelar:   16,   // ajos
-    cortar:  50,   // cebolla
-    picar:   16,   // ají
-    mezclar: 16,   // aderezo
-  },
+  // Música de fondo (todo el juego). Prioridad: mp3 > youtube > melodía sintetizada.
+  music: { mp3: "src/fondo.mp3", youtube: null, volume: 0.6 },
+
+  // Ranking en Google Sheets: pega aquí la URL del Apps Script Web App (termina en /exec).
+  // Si es null, el ranking funciona local (sin guardar). Ver README para el código del Apps Script.
+  ranking: { endpoint: null },
 };
-// Permite override externo opcional
 if (window.__GAME_ASSETS__) Object.assign(ASSETS, window.__GAME_ASSETS__);
 
-/* ════════════════════════════════════════════════════════════════════════
-   Helpers de imagen / visual
-   ════════════════════════════════════════════════════════════════════════ */
+/* ---------- Helpers ---------- */
 const $  = (s, el=document) => el.querySelector(s);
 const $$ = (s, el=document) => [...el.querySelectorAll(s)];
 const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
 const rand = (a,b)=>a+Math.random()*(b-a);
 const shuffle = a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
-const el = (tag,cls)=>{const e=document.createElement(tag); if(cls)e.className=cls; return e;};
-
-function imgUrl(name){
-  if(!name) return null;
-  if(/^(https?:|data:)/.test(name)) return name;        // URL absoluta o data:
-  let p = name;
-  if(!/\.[a-z0-9]{2,5}$/i.test(p)) p += ASSETS.ext;       // añade extensión si falta
-  if(!/^[\/.]/.test(p)) p = ASSETS.base + p;              // antepone carpeta base
-  return p;
-}
-// Devuelve un nodo .vis con imagen (con fallback a emoji) o emoji.
-function makeVisual(spec, px){
-  const v = el('span','vis');
+const el = (t,c)=>{const e=document.createElement(t); if(c)e.className=c; return e;};
+function imgUrl(name){ if(!name) return null; if(/^(https?:|data:)/.test(name)) return name;
+  let p=name; if(!/\.[a-z0-9]{2,5}$/i.test(p)) p+=ASSETS.ext; if(!/^[\/.]/.test(p)) p=ASSETS.base+p; return p; }
+function makeVisual(spec, px){ const v=el('span','vis');
   if(px){ v.style.width=px+'px'; v.style.height=px+'px'; v.style.fontSize=Math.round(px*0.8)+'px'; }
-  const url = imgUrl(spec && spec.img);
-  if(url){
-    const img = el('img'); img.src=url; img.alt=(spec&&spec.name)||''; img.draggable=false;
-    img.onerror = ()=>{ v.textContent = (spec&&spec.emoji)||'❔'; };
-    v.appendChild(img);
-  } else {
-    v.textContent = (spec&&spec.emoji)||'❔';
-  }
-  return v;
-}
-function setVisual(container, spec, px){ container.replaceChildren(makeVisual(spec, px)); }
-
-// Íconos de interfaz: render por clave de ASSETS.ui (imagen o emoji)
-function uiSpec(k){ return (ASSETS.ui && ASSETS.ui[k]) || {emoji:'❔'}; }
-function uiVisual(k,px){ return makeVisual(uiSpec(k), px); }
-// Rellena todos los [data-ui] estáticos del HTML con su imagen/emoji
-function hydrateUI(){ $$('[data-ui]').forEach(e=>{ e.replaceChildren(uiVisual(e.dataset.ui, +e.dataset.size||22)); }); }
-
-// Secuencia progresiva: si hay imágenes usa <img> y cambia src; si no, emoji fijo.
-function makeFrames(seq, fallbackEmoji, px){
-  const v = el('span','vis');
+  const url=imgUrl(spec&&spec.img);
+  if(url){ const img=el('img'); img.src=url; img.alt=(spec&&spec.name)||''; img.draggable=false; img.onerror=()=>{ v.textContent=(spec&&spec.emoji)||'❔'; }; v.appendChild(img); }
+  else v.textContent=(spec&&spec.emoji)||'❔';
+  return v; }
+function setVisual(c,spec,px){ c.replaceChildren(makeVisual(spec,px)); }
+function makeFrames(seq, emoji, px){ const v=el('span','vis');
   if(px){ v.style.width=px+'px'; v.style.height=px+'px'; v.style.fontSize=Math.round(px*0.8)+'px'; }
-  const urls = (seq||[]).map(imgUrl).filter(Boolean);
-  let img = null;
-  if(urls.length){
-    img = el('img'); img.draggable=false; img.src=urls[0];
-    img.onerror = ()=>{ img.style.display='none'; v.textContent=fallbackEmoji||''; };
-    v.appendChild(img);
-  } else {
-    v.textContent = fallbackEmoji || '';
-  }
-  return {
-    node:v, count:urls.length, hasImg:urls.length>0,
-    setFrac(frac){ if(!urls.length) return; const i=clamp(Math.floor(frac*urls.length),0,urls.length-1); img.src=urls[i]; },
-    setIndex(i){ if(!urls.length) return; i=clamp(i,0,urls.length-1); img.src=urls[i]; }
-  };
-}
+  const urls=(seq||[]).map(imgUrl).filter(Boolean); let img=null;
+  if(urls.length){ img=el('img'); img.draggable=false; img.src=urls[0]; img.onerror=()=>{ img.style.display='none'; v.textContent=emoji||''; }; v.appendChild(img); }
+  else v.textContent=emoji||'';
+  return { node:v, count:urls.length, hasImg:urls.length>0,
+    setFrac(f){ if(!urls.length)return; img.src=urls[clamp(Math.floor(f*urls.length),0,urls.length-1)]; },
+    setIndex(i){ if(!urls.length)return; img.src=urls[clamp(i,0,urls.length-1)]; } }; }
+function uiSpec(k){ return (ASSETS.ui&&ASSETS.ui[k])||{emoji:'❔'}; }
+function hydrateUI(){ $$('[data-ui]').forEach(e=>{ e.replaceChildren(makeVisual(uiSpec(e.dataset.ui), +e.dataset.size||22)); }); }
+function centerOf(node){ const r=node.getBoundingClientRect(); return {x:r.left+r.width/2,y:r.top+r.height/2}; }
+function sparkleAt(x,y){ for(let i=0;i<6;i++){ const s=el('div','spark'); s.textContent='✦';
+  s.style.left=(x+rand(-16,16))+'px'; s.style.top=(y+rand(-10,10))+'px'; s.style.fontSize=rand(10,20)+'px';
+  document.body.appendChild(s); setTimeout(()=>s.remove(),800); } }
+function confetti(host,n=40){ const ems=['🌶️','🧄','🧅','🍚','🍠','✨','🔥','🌽','🫔'];
+  for(let i=0;i<n;i++){ const f=el('div','fx'); f.textContent=ems[i%ems.length];
+    f.style.left=rand(0,100)+'%'; f.style.top='-20px'; f.style.fontSize=rand(14,26)+'px';
+    f.style.animationDuration=rand(1.8,3.4)+'s'; f.style.animationDelay=rand(0,.6)+'s'; host.appendChild(f); setTimeout(()=>f.remove(),4200); } }
 
 /* ---------- AUDIO ---------- */
-const Audio_ = (()=> {
-  let ctx=null, muted=false, melodyTimer=null;
-  const ensure=()=>{ if(!ctx) ctx=new (window.AudioContext||window.webkitAudioContext)(); if(ctx.state==='suspended') ctx.resume(); return ctx; };
-  const tone=(freq,dur=.16,type='sine',vol=.18,when=0)=>{ if(muted) return; const c=ensure(); const t=c.currentTime+when;
-    const o=c.createOscillator(),g=c.createGain(); o.type=type;o.frequency.value=freq;o.connect(g);g.connect(c.destination);
-    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
-    o.start(t);o.stop(t+dur+.02); };
-  const noise=(dur=.12,vol=.2,lp=2000)=>{ if(muted) return; const c=ensure();
-    const b=c.createBuffer(1,c.sampleRate*dur,c.sampleRate); const d=b.getChannelData(0);
-    for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*(1-i/d.length);
-    const s=c.createBufferSource();s.buffer=b; const f=c.createBiquadFilter();f.type='lowpass';f.frequency.value=lp;
-    const g=c.createGain();g.gain.value=vol; s.connect(f);f.connect(g);g.connect(c.destination);s.start(); };
-  return {
-    chime(){ tone(880,.12,'sine',.16); tone(1320,.18,'sine',.13,.07); },
-    good(){ tone(660,.1,'triangle',.16); tone(990,.16,'triangle',.13,.06); },
-    error(){ tone(180,.22,'sawtooth',.16); tone(120,.26,'sawtooth',.12,.03); },
-    knife(){ noise(.07,.22,3200); },
-    plop(){ tone(320,.12,'sine',.18); noise(.05,.1,900); },
-    sizzle(){ noise(.3,.08,1600); },
-    fanfare(){ [523,659,784,1046].forEach((f,i)=>tone(f,.3,'triangle',.16,i*.12)); },
-    toggleMute(){ muted=!muted; if(muted)this.stopMelody(); return muted; },
-    isMuted(){return muted;},
-    startMelody(){ if(muted) return; this.stopMelody(); ensure();
-      const notes=[392,440,494,523,494,440,392,440,523,587,523,494,440,494,523,587,659,587,523,494,440,392,349,392]; let i=0;
-      const step=()=>{ const f=notes[i%notes.length]; tone(f,.42,'triangle',.09); tone(f/2,.42,'sine',.05); i++; melodyTimer=setTimeout(step, i%3===0?420:300); }; step(); },
-    stopMelody(){ if(melodyTimer){clearTimeout(melodyTimer);melodyTimer=null;} }
-  };
+const Audio_=(()=>{ let ctx=null,muted=false,mt=null;
+  const ensure=()=>{ if(!ctx)ctx=new(window.AudioContext||window.webkitAudioContext)(); if(ctx.state==='suspended')ctx.resume(); return ctx; };
+  const tone=(f,d=.16,t='sine',v=.18,w=0)=>{ if(muted)return; const c=ensure(),tt=c.currentTime+w,o=c.createOscillator(),g=c.createGain();
+    o.type=t;o.frequency.value=f;o.connect(g);g.connect(c.destination);g.gain.setValueAtTime(0,tt);g.gain.linearRampToValueAtTime(v,tt+.012);g.gain.exponentialRampToValueAtTime(.0001,tt+d);o.start(tt);o.stop(tt+d+.02); };
+  const noise=(d=.12,v=.2,lp=2000)=>{ if(muted)return; const c=ensure(),b=c.createBuffer(1,c.sampleRate*d,c.sampleRate),dt=b.getChannelData(0);
+    for(let i=0;i<dt.length;i++)dt[i]=(Math.random()*2-1)*(1-i/dt.length); const s=c.createBufferSource();s.buffer=b;const fl=c.createBiquadFilter();fl.type='lowpass';fl.frequency.value=lp;const g=c.createGain();g.gain.value=v;s.connect(fl);fl.connect(g);g.connect(c.destination);s.start(); };
+  return { chime(){tone(880,.12,'sine',.16);tone(1320,.18,'sine',.13,.07);}, good(){tone(660,.1,'triangle',.16);tone(990,.16,'triangle',.13,.06);},
+    error(){tone(180,.22,'sawtooth',.16);tone(120,.26,'sawtooth',.12,.03);}, knife(){noise(.07,.22,3200);}, plop(){tone(320,.12,'sine',.18);noise(.05,.1,900);},
+    sizzle(){noise(.3,.08,1600);}, fanfare(){[523,659,784,1046].forEach((f,i)=>tone(f,.3,'triangle',.16,i*.12));},
+    toggleMute(){muted=!muted; if(muted)this.stopMelody(); return muted;}, isMuted(){return muted;},
+    startMelody(){ if(muted)return; this.stopMelody(); ensure(); const ns=[392,440,494,523,494,440,392,440,523,587,523,494,440,494,523,587,659,587,523,494,440,392,349,392]; let i=0;
+      const step=()=>{ const f=ns[i%ns.length]; tone(f,.42,'triangle',.09); tone(f/2,.42,'sine',.05); i++; mt=setTimeout(step,i%3===0?420:300); }; step(); },
+    stopMelody(){ if(mt){clearTimeout(mt);mt=null;} } };
 })();
 
-/* ---------- MÚSICA POR YOUTUBE (opcional) ---------- */
-function parseYouTube(v){
-  if(!v) return null;
-  if(/^[\w-]{11}$/.test(v)) return v;                          // ya es un ID
-  const m=String(v).match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/)([\w-]{11})/);
-  return m ? m[1] : null;
-}
-const Yt = {
-  id:null, origin:null, player:null, ready:false, pending:false, playing:false, failed:false, _fb:null,
-  setup(){
-    this.id = parseYouTube(ASSETS.music && ASSETS.music.youtube);
-    if(!this.id) return false;
-    const o = location.origin;
-    this.origin = (o && o !== 'null') ? o : null;
-    if(!this.origin){
-      // file:// o iframe con sandbox => el reproductor de YouTube no puede comunicarse (postMessage origin 'null').
-      this.failed = true;
-      console.info('[Frito] La música de YouTube requiere servir el archivo por http(s). Mientras tanto sonará la melodía sintetizada.');
-      return false;
-    }
-    if(!document.getElementById('ytHolder')){ const d=el('div'); d.id='ytHolder';
-      d.style.cssText='position:absolute;left:-9999px;width:0;height:0;overflow:hidden'; document.body.appendChild(d); }
-    this.loadApi(); return true;
-  },
-  loadApi(){
-    if(window.YT && window.YT.Player){ this.create(); return; }
-    if(!document.getElementById('yt-iframe-api')){ const s=el('script'); s.id='yt-iframe-api';
-      s.src='https://www.youtube.com/iframe_api'; s.onerror=()=>{ this.failed=true; }; document.head.appendChild(s); }
-    const prev=window.onYouTubeIframeAPIReady;
-    window.onYouTubeIframeAPIReady=()=>{ if(typeof prev==='function') prev(); this.create(); };
-  },
-  create(){
-    if(this.player || !window.YT || !window.YT.Player) return;
-    this.player=new YT.Player('ytHolder',{ width:'0', height:'0', videoId:this.id,
-      playerVars:{ autoplay:0, controls:0, disablekb:1, loop:1, playlist:this.id, modestbranding:1, playsinline:1, rel:0, origin:this.origin },
-      events:{ onReady:()=>{ this.ready=true; if(this.pending){ this.pending=false; this.play(); } } } });
-  },
-  available(){ return !!this.id && !this.failed; },
-  play(){ if(!this.ready){ this.pending=true; return; }
-    try{ this.player.playVideo(); if(Audio_.isMuted()) this.player.mute(); else this.player.unMute();
-      this.playing=true; Audio_.stopMelody(); }catch(e){} },
-  pause(){ this.pending=false; this.playing=false; if(this.ready){ try{ this.player.pauseVideo(); }catch(e){} } },
-  setMute(m){ if(this.ready){ try{ m?this.player.mute():this.player.unMute(); }catch(e){} } }
-};
+/* ---------- YouTube / MP3 / BGM ---------- */
+function parseYouTube(v){ if(!v)return null; if(/^[\w-]{11}$/.test(v))return v; const m=String(v).match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/)([\w-]{11})/); return m?m[1]:null; }
+const Yt={ id:null,origin:null,player:null,ready:false,pending:false,playing:false,failed:false,_fb:null,
+  setup(){ this.id=parseYouTube(ASSETS.music&&ASSETS.music.youtube); if(!this.id)return false;
+    const o=location.origin; this.origin=(o&&o!=='null')?o:null;
+    if(!this.origin){ this.failed=true; return false; }
+    if(!document.getElementById('ytHolder')){ const d=el('div'); d.id='ytHolder'; d.style.cssText='position:absolute;left:-9999px;width:0;height:0;overflow:hidden'; document.body.appendChild(d); }
+    this.loadApi(); return true; },
+  loadApi(){ if(window.YT&&window.YT.Player){this.create();return;} if(!document.getElementById('yt-iframe-api')){const s=el('script');s.id='yt-iframe-api';s.src='https://www.youtube.com/iframe_api';s.onerror=()=>{this.failed=true;};document.head.appendChild(s);} const prev=window.onYouTubeIframeAPIReady; window.onYouTubeIframeAPIReady=()=>{ if(typeof prev==='function')prev(); this.create(); }; },
+  create(){ if(this.player||!window.YT||!window.YT.Player)return; this.player=new YT.Player('ytHolder',{width:'0',height:'0',videoId:this.id,playerVars:{autoplay:0,controls:0,disablekb:1,loop:1,playlist:this.id,modestbranding:1,playsinline:1,rel:0,origin:this.origin},events:{onReady:()=>{this.ready=true; if(this.pending){this.pending=false;this.play();}}}}); },
+  available(){ return !!this.id&&!this.failed; },
+  play(){ if(!this.ready){this.pending=true;return;} try{ this.player.playVideo(); Audio_.isMuted()?this.player.mute():this.player.unMute(); this.playing=true; Audio_.stopMelody(); }catch(e){} },
+  pause(){ this.pending=false;this.playing=false; if(this.ready){try{this.player.pauseVideo();}catch(e){}} },
+  setMute(m){ if(this.ready){try{ m?this.player.mute():this.player.unMute(); }catch(e){}} } };
+const BGM={ started:false,mode:null,audio:null,
+  setup(){ const m=ASSETS.music||{}; this.volume=(typeof m.volume==='number')?m.volume:0.6;
+    if(m.mp3){ this.mode='mp3'; this.audio=new Audio(m.mp3); this.audio.loop=true; this.audio.preload='auto'; this.audio.volume=this.volume;
+      this.audio.addEventListener('error',()=>{ this.mode='synth'; if(this.started&&!Audio_.isMuted())Audio_.startMelody(); }); return; }
+    Yt.setup(); this.mode=Yt.available()?'yt':'synth'; },
+  start(){ if(this.started)return; this.started=true;
+    if(this.mode==='mp3'){ this.audio.muted=Audio_.isMuted(); this.audio.play().catch(()=>{ if(!Audio_.isMuted()){this.mode='synth';Audio_.startMelody();} }); }
+    else if(this.mode==='yt'){ Yt.play(); clearTimeout(Yt._fb); Yt._fb=setTimeout(()=>{ if(!Yt.playing&&!Audio_.isMuted()){this.mode='synth';Audio_.startMelody();} },2800); }
+    else { if(!Audio_.isMuted())Audio_.startMelody(); } },
+  setMuted(m){ if(this.audio)this.audio.muted=m; Yt.setMute(m);
+    if(m){ Audio_.stopMelody(); } else { if(this.mode==='mp3'&&this.audio){ this.audio.muted=false; if(this.audio.paused&&this.started)this.audio.play().catch(()=>{}); } else if(this.mode==='synth'&&this.started&&!Yt.playing){ Audio_.startMelody(); } } } };
 
-/* ---------- MÚSICA DE FONDO (todo el juego) ---------- */
-const BGM = {
-  started:false, mode:null, audio:null,
-  setup(){
-    const m = ASSETS.music || {};
-    this.volume = (typeof m.volume==='number') ? m.volume : 0.6;
-    if(m.mp3){
-      this.mode='mp3';
-      this.audio=new Audio(m.mp3);
-      this.audio.loop=true; this.audio.preload='auto'; this.audio.volume=this.volume;
-      this.audio.addEventListener('error',()=>{ // si el mp3 no carga, cae a la melodía
-        this.mode='synth'; if(this.started && !Audio_.isMuted()) Audio_.startMelody(); });
-      return;
-    }
-    // sin mp3: probar YouTube
-    Yt.setup();
-    this.mode = Yt.available() ? 'yt' : 'synth';
-  },
-  start(){
-    if(this.started) return; this.started=true;
-    if(this.mode==='mp3'){
-      this.audio.muted = Audio_.isMuted();
-      this.audio.play().catch(()=>{ // navegador bloqueó el autoplay o falló el archivo
-        if(!Audio_.isMuted()){ this.mode='synth'; Audio_.startMelody(); } });
-    } else if(this.mode==='yt'){
-      Yt.play();
-      clearTimeout(Yt._fb);
-      Yt._fb=setTimeout(()=>{ if(!Yt.playing && !Audio_.isMuted()){ this.mode='synth'; Audio_.startMelody(); } }, 2800);
-    } else {
-      if(!Audio_.isMuted()) Audio_.startMelody();
-    }
-  },
-  setMuted(m){
-    if(this.audio) this.audio.muted=m;
-    Yt.setMute(m);
-    if(m){ Audio_.stopMelody(); }
-    else {
-      if(this.mode==='mp3' && this.audio){ this.audio.muted=false; if(this.audio.paused && this.started) this.audio.play().catch(()=>{}); }
-      else if(this.mode==='synth' && this.started && !Yt.playing){ Audio_.startMelody(); }
-    }
-  }
-};
+/* ---------- Timer ---------- */
+function makeTimer(eln, seconds, onTick, onEnd){
+  let remaining=seconds, raf, last=performance.now(), stopped=false;
+  const fmt=s=>`${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+  const tick=now=>{ if(stopped)return; const dt=(now-last)/1000; last=now; remaining-=dt;
+    if(remaining<=0){ remaining=0; render(); onEnd&&onEnd(); return; } render(); onTick&&onTick(remaining); raf=requestAnimationFrame(tick); };
+  function render(){ eln.textContent=eln.dataset.prefix+' '+fmt(remaining); eln.classList.toggle('warn',remaining<=12&&remaining>6); eln.classList.toggle('danger',remaining<=6); }
+  return { start(){ stopped=false; last=performance.now(); render(); raf=requestAnimationFrame(tick); },
+    stop(){ stopped=true; cancelAnimationFrame(raf); },
+    penalty(s){ remaining=Math.max(0,remaining-s); render(); if(remaining<=0){this.stop();onEnd&&onEnd();} },
+    add(s){ remaining+=s; render(); },
+    get(){return remaining;} }; }
 
-/* ---------- STATE / TEXTS ---------- */
-const State = { level:0, badges:[false,false,false,false] };
+/* ════════════ ESTADO / TEXTOS ════════════ */
+const Game = { points:0, startTime:0, totalSeconds:0 };
+const RANKS = [[0,'Aprendiz'],[5,'Ayudante'],[10,'Cocinero'],[15,'Sazonador'],[20,'Maestro']];
 const CULTURE = [
-  "El frito piurano nació en las antiguas comunidades agrícolas del Bajo Piura, donde las familias usaban ingredientes accesibles y energéticos para alimentar largas jornadas de trabajo en el campo.",
-  "El aderezo es una de las partes más importantes del frito piurano. La mezcla justa de ajo, cebolla y ají permite que la carne absorba el sabor característico que distingue este plato típico.",
-  "El frito piurano refleja la mezcla cultural de la gastronomía peruana: la carne de cerdo llegó con la colonización española, mientras que el maíz y el camote provienen de las culturas prehispánicas.",
-  "El frito piurano no solo representa un plato típico, sino una parte importante de la historia y la identidad cultural de Piura. Su preparación conserva técnicas y saberes transmitidos por generaciones."
+  "El frito piurano nació en las antiguas comunidades agrícolas del Bajo Piura, donde las familias usaban ingredientes accesibles y energéticos —carne de chancho, arroz, camote, plátano y maíz— para alimentar largas jornadas en el campo.",
+  "El frito piurano refleja la mezcla cultural de la gastronomía peruana: la carne de cerdo llegó con la colonización española, mientras que el maíz (para los tamales) y el camote vienen de las culturas prehispánicas.",
+  "Después de freír la carne, esta vuelve a cocinarse junto al aderezo de ajo, cebolla y ají amarillo. Este segundo proceso permite que absorba los sabores, conserve su jugosidad y adquiera el aroma característico.",
 ];
-const FINAL_MSG = "El frito piurano no solo alimenta familias; también conserva historias, tradiciones y la identidad de nuestra tierra.";
-const INTROS = [
-  {tag:'Nivel 1 · El mercado', title:'Escoge los ingredientes', text:'Tienes 45 segundos para tocar solo los ingredientes del frito piurano entre los que hay en la mesa. ¡Ojo con los intrusos!'},
-  {tag:'Nivel 2 · El fogón', title:'Prepara los condimentos', text:'Pela, corta, pica y mezcla deslizando sobre la tabla. Hazlo con ritmo: el apuro arruina el picado.'},
-  {tag:'Nivel 3 · La olla', title:'Cocina el frito', text:'Echa los ingredientes en orden y controla el fuego para cocinar la carne sin quemarla.'},
-  {tag:'Nivel 4 · La mesa', title:'Sirve el plato', text:'Emplata el frito, la yuca, la salsa criolla y los chifles antes de que llegue el cliente.'},
-];
+const FINAL_MSG = "El frito piurano nació en las comunidades agrícolas del Bajo Piura como desayuno para quienes trabajaban largas jornadas. Hoy reúne a las familias y conserva técnicas transmitidas de generación en generación.";
+
+const DIALOG = {
+  intro: [
+    "Bienvenido, aprendiz. Hoy no solo aprenderás a preparar un rico frito piurano: descubrirás la historia de una tradición que ha unido a las familias piuranas durante generaciones.",
+    { text:"Comenzarás con 0 puntos. Cada nivel completado te da 5 puntos: al llegar a 20/20 serás todo un experto. Arriba verás tus puntos y tu rango de chef.",
+      reveal:true, highlight:[{sel:'.points',text:'Tus puntos'},{sel:'.rank-badge',text:'Tu rango'}] },
+    { text:"Y atención: cada nivel es contrarreloj. La barrita junto al tiempo se irá gastando, así que ¡no te distraigas!" }
+  ],
+  l1: [
+    "Aprendiz, debes seleccionar los ingredientes correctos en 45 segundos. Los demás insumos servirán para otros platos típicos de Piura. ¡Tú puedes!",
+    "Cada vez que elijas un ingrediente que no pertenece al frito piurano perderás 3 segundos. Observa bien antes de seleccionar. ¡Cada segundo cuenta!",
+    "¡Ahora sí, vamos a elegir los ingredientes!"
+  ],
+  l2: [
+    "La carne de cerdo es el ingrediente principal del frito piurano. Cortarla en porciones uniformes permite una cocción adecuada y conserva su textura y sabor.",
+    "La buena preparación de la carne es el secreto del auténtico frito piurano; hay que ser muy cuidadoso al cortarla.",
+    "Cada corte debe ser del tamaño correcto y no debes dejar grasa. Si te equivocas al cortar pierdes 3 segundos, y si dejas grasa perderás el nivel. ¡Concéntrate!"
+  ],
+  l3: [
+    "La buena cocción de la carne es el secreto del auténtico frito piurano; hay que lograr una fritura en el punto exacto.",
+    "¡Atención! Necesitas mantener la carne 30 segundos en el indicador verde para que quede perfectamente frita.",
+    "Pero cuidado: si dejas la carne 3 segundos en amarillo o rojo, perderás 5 segundos. Vigila el fuego en todo momento."
+  ],
+  l3post: [
+    "¡Excelente trabajo! La carne ya está perfectamente frita. Ahora le agrego el aderezo y la cocino lentamente para que absorba todos los sabores. Mientras tanto… ¡cómete un tamalito y descansa!"
+  ],
+  l4intro: [
+    "¡Muy bien, aprendiz! Ya dominaste lo más importante. Mientras preparabas la carne, yo me encargué del arroz. Ahora solo queda servir el frito piurano, como cada domingo en La Unión."
+  ],
+  l4: [
+    "¡Los clientes están llegando… es hora de servir!",
+    "Cada plato debe llevar todos los ingredientes y no puedes repetir ninguno. Si colocas un ingrediente incorrecto perderás 5 segundos. Si al terminar queda un plato incompleto, vuelves a intentarlo. ¡Apúrate!"
+  ],
+  final: [
+    "¡Lo lograste! Hoy no solo preparaste un plato típico, también ayudaste a mantener viva una tradición que forma parte de la historia de muchas familias piuranas.",
+    "¡Felicitaciones, aprendiz! Conseguiste los 20 puntos. Aprendiste cada paso de esta tradición y ya puedes llevar con orgullo el título de…"
+  ],
+};
 
 function showScreen(id){ $$('.scr').forEach(s=>s.classList.remove('active')); $('#'+id).classList.add('active'); }
 function showOverlay(id){ $('#'+id).classList.add('active'); }
 function hideOverlay(id){ $('#'+id).classList.remove('active'); }
+function rankFor(p){ let r='Aprendiz'; RANKS.forEach(([t,n])=>{ if(p>=t)r=n; }); return r; }
+function setPoints(p,animate){ Game.points=p; $('#ptsTxt').textContent=p+'/20'; $('#ptsFill').style.width=(p/20*100)+'%'; $('#rankTxt').textContent=rankFor(p); }
+function showProgressHUD(b){ $('.stage').classList.toggle('show-prog', b); }
 
-function buildBadgesMini(){
-  const c=$('#badgesMini'); c.innerHTML='';
-  ASSETS.badges.forEach((b,i)=>{ const d=el('div','b'); d.dataset.b=i; d.appendChild(makeVisual(b,15)); c.appendChild(d); });
-  updateBadgesMini();
-}
-function updateBadgesMini(){ $$('#badgesMini .b').forEach((b,i)=> b.classList.toggle('on', State.badges[i])); }
+/* coach-marks: resaltar y señalar elementos del HUD durante la explicación */
+let coachEls=[], coachLabels=[];
+function highlight(items){ clearHighlight();
+  items.forEach(it=>{ const t=$(it.sel); if(!t)return; t.classList.add('coach'); coachEls.push(t);
+    const r=t.getBoundingClientRect(); const lab=el('div','coach-label'); lab.textContent='☝ '+it.text;
+    lab.style.left=(r.left+r.width/2)+'px'; lab.style.top=(r.bottom+8)+'px'; document.body.appendChild(lab); coachLabels.push(lab); }); }
+function clearHighlight(){ coachEls.forEach(e=>e.classList.remove('coach')); coachEls=[]; coachLabels.forEach(l=>l.remove()); coachLabels=[]; }
 
-function makeTimer(eln, seconds, onTick, onEnd){
-  let remaining=seconds, raf, last=performance.now();
-  const fmt=s=>`${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
-  const tick=now=>{ const dt=(now-last)/1000; last=now; remaining-=dt;
-    if(remaining<=0){ remaining=0; render(); cancelAnimationFrame(raf); onEnd&&onEnd(); return; }
-    render(); onTick&&onTick(remaining); raf=requestAnimationFrame(tick); };
-  function render(){ eln.textContent = eln.dataset.prefix + ' ' + fmt(remaining);
-    eln.classList.toggle('warn', remaining<=12 && remaining>6); eln.classList.toggle('danger', remaining<=6); }
-  return { start(){ last=performance.now(); render(); raf=requestAnimationFrame(tick); },
-    stop(){ cancelAnimationFrame(raf); },
-    penalty(s){ remaining=Math.max(0,remaining-s); render(); if(remaining<=0){this.stop();onEnd&&onEnd();} },
-    get(){return remaining;} };
-}
-function sparkleAt(x,y){ for(let i=0;i<6;i++){ const s=el('div','spark'); s.textContent='✦';
-  s.style.left=(x+rand(-16,16))+'px'; s.style.top=(y+rand(-10,10))+'px'; s.style.fontSize=rand(10,20)+'px';
-  document.body.appendChild(s); setTimeout(()=>s.remove(),800); } }
-function confetti(host,n=40){ const ems=['🌶️','🧄','🧅','🍋','🌿','✨','🔥','🌽'];
-  for(let i=0;i<n;i++){ const f=el('div','fx'); f.textContent=ems[i%ems.length];
-    f.style.left=rand(0,100)+'%'; f.style.top='-20px'; f.style.fontSize=rand(14,26)+'px';
-    f.style.animationDuration=rand(1.8,3.4)+'s'; f.style.animationDelay=rand(0,.6)+'s';
-    host.appendChild(f); setTimeout(()=>f.remove(),4200); } }
-function centerOf(node){ const r=node.getBoundingClientRect(); return {x:r.left+r.width/2, y:r.top+r.height/2}; }
+/* ---------- Narrador ---------- */
+const Narrator = (()=> {
+  let queue=[], i=0, cb=null;
+  function say(lines, onDone, withScene){
+    queue=lines.map(l=> typeof l==='string' ? {text:l} : l ); i=0; cb=onDone||null;
+    setVisual($('#dlgChar'), ASSETS.narrator, 96);
+    $('#dlgName').textContent=ASSETS.narrator.name;
+    const sc=$('#dlgScene'); if(withScene){ setVisual(sc, ASSETS.scene, 180); sc.style.display='grid'; } else sc.style.display='none';
+    render(); showOverlay('ovNarrator');
+  }
+  function render(){ const line=queue[i]; $('#dlgText').textContent=line.text;
+    if(line.reveal) showProgressHUD(true);
+    if(line.highlight) highlight(line.highlight); else clearHighlight(); }
+  function next(){ clearHighlight(); i++;
+    if(i>=queue.length){ hideOverlay('ovNarrator'); const f=cb; cb=null; f&&f(); }
+    else { Audio_.plop(); render(); } }
+  $('#ovNarrator').addEventListener('click', next);
+  return { say };
+})();
 
-/* ---------- FLOW ---------- */
-function goToLevelIntro(n){ State.level=n; const info=INTROS[n];
-  showScreen('scr-l'+(n+1));   // oculta el menú de inicio (o el nivel anterior) detrás del intro
-  $('#ovIntroTag').textContent=info.tag; $('#ovIntroTitle').textContent=info.title; $('#ovIntroText').textContent=info.text; showOverlay('ovIntro'); }
-$('#ovIntroBtn').onclick=()=>{ Audio_.good(); hideOverlay('ovIntro'); startLevel(State.level); };
+/* ════════════ SECUENCIA DEL JUEGO ════════════ */
+const FLOW = [
+  ()=>Narrator.say(DIALOG.intro, run, true),
+  ()=>Narrator.say(DIALOG.l1, ()=>startLevel(0)),
+  ()=>reward(0),
+  ()=>Narrator.say(DIALOG.l2, ()=>startLevel(1)),
+  ()=>reward(1),
+  ()=>Narrator.say(DIALOG.l3, ()=>startLevel(2)),
+  ()=>reward(2),
+  ()=>Narrator.say(DIALOG.l3post, run, true),
+  ()=>Narrator.say(DIALOG.l4intro, run),
+  ()=>Narrator.say(DIALOG.l4, ()=>startLevel(3)),
+  ()=>reward(3),
+  ()=>showFinal(),
+];
+let flowStep=0, curLevel=0;
+function run(){ const step=FLOW[flowStep++]; step&&step(); }
 
-function rewardAndNext(n){ State.badges[n]=true; updateBadgesMini();
-  setVisual($('#ovBadgeIcon'), ASSETS.badges[n], 76);
+function startLevel(n){ curLevel=n; showScreen('scr-l'+(n+1));
+  [Level1,Level2,Level3,Level4][n].start(); }
+function levelDone(){ run(); }            // llamar al ganar un nivel (avanza a reward)
+function reward(n){
+  setPoints((n+1)*5, true);
+  setVisual($('#ovBadgeIcon'), ASSETS.badges[n], 72);
   $('#ovBadgeName').textContent='“'+ASSETS.badges[n].name+'”';
-  $('#ovCulture').textContent=CULTURE[n];
-  $('#ovRewardBtn').textContent = n<3 ? 'Siguiente nivel' : 'Ver resultado final';
-  showOverlay('ovReward'); Audio_.fanfare(); confetti($('#ovReward'),36); }
-$('#ovRewardBtn').onclick=()=>{ hideOverlay('ovReward'); const n=State.level; if(n<3) goToLevelIntro(n+1); else showFinal(); };
+  $('#ovPts').textContent='+5 puntos  ·  '+((n+1)*5)+'/20';
+  $('#ovCulture').textContent = n<3 ? CULTURE[n] : '';
+  $('#ovCulture').style.display = n<3 ? '' : 'none';
+  $('#ovRewardBtn').textContent = n<3 ? 'Continuar' : 'Ver resultado';
+  showOverlay('ovReward'); Audio_.fanfare(); confetti($('#ovReward'),36);
+}
+$('#ovRewardBtn').onclick=()=>{ hideOverlay('ovReward'); run(); };
 
-function failLevel(msg){ $('#ovFailText').textContent=msg||'La cocina tradicional pide práctica. ¡Inténtalo otra vez!'; showOverlay('ovFail'); Audio_.error(); }
-$('#ovFailBtn').onclick=()=>{ hideOverlay('ovFail'); startLevel(State.level); };
+function failLevel(msg,title){ $('#ovFailText').textContent=msg||''; $('#ovFailTitle').textContent=title||'Inténtalo de nuevo'; showOverlay('ovFail'); Audio_.error(); }
+$('#ovFailBtn').onclick=()=>{ hideOverlay('ovFail'); [Level1,Level2,Level3,Level4][curLevel].start(); };
 
-function startLevel(n){ showScreen('scr-l'+(n+1));
-  if(n===0) Level1.start(); if(n===1) Level2.start(); if(n===2) Level3.start(); if(n===3) Level4.start(); }
-
-/* ════════════ LEVEL 1 ════════════ */
-const Level1 = (()=> {
-  const I=ASSETS.ingredients;
-  let timer, found, ring, orbits=[];
-  function start(){
-    found=0; ring=$('#l1Ring'); ring.innerHTML=''; orbits=[];
-    $('#l1Bar').style.width='100%'; $('#l1Count').textContent='8';
-    const correct=['cerdo','ajo','cebolla','aji','chicha','yuca','limon','culantro'].map(k=>({...I[k],ok:true}));
-    const wrong=['pimiento','menestra','pescado','caldo','fideos','lechuga'].map(k=>({...I[k],ok:false}));
-    shuffle([...correct,...wrong]).forEach(it=>{
-      const orbit=el('div','orbit');
-      const t=el('button','l1-tile'); t.type='button'; t.setAttribute('aria-label',it.name);
-      const counter=el('span','l1-counter');
-      counter.appendChild(makeVisual(it,38));
-      const nm=el('span','nm'); nm.textContent=it.name; counter.appendChild(nm);
-      t.appendChild(counter); t.onclick=()=>pick(it,t);
-      orbit.appendChild(t); ring.appendChild(orbit); orbits.push(orbit);
-    });
-    layout();
-    window.removeEventListener('resize', layout); window.addEventListener('resize', layout);
-    // sincroniza el giro del anillo con las contra-rotaciones recién creadas
+/* ════════════ NIVEL 1 ════════════ */
+const Level1=(()=>{ const I=ASSETS.ingredients; let timer,found,ring,orbits=[];
+  const correctKeys=['cerdo','ajo','cebolla','aji','camote','chicha','arroz','aceite','platano','tamal','achiote'];
+  const wrongKeys=['pimiento','menestra','pescado','limon','yuca','culantro'];
+  function start(){ found=0; ring=$('#l1Ring'); ring.innerHTML=''; orbits=[]; $('#l1Bar').style.width='100%'; $('#l1Count').textContent='11';
+    const items=shuffle([...correctKeys.map(k=>({...I[k],ok:true})),...wrongKeys.map(k=>({...I[k],ok:false}))]);
+    items.forEach(it=>{ const o=el('div','orbit'); const t=el('button','l1-tile'); t.type='button'; t.setAttribute('aria-label',it.name);
+      const c=el('span','l1-counter'); c.appendChild(makeVisual(it,34)); const nm=el('span','nm'); nm.textContent=it.name; c.appendChild(nm); t.appendChild(c);
+      t.onclick=()=>pick(it,t); o.appendChild(t); ring.appendChild(o); orbits.push(o); });
+    layout(); window.removeEventListener('resize',layout); window.addEventListener('resize',layout);
     ring.style.animation='none'; void ring.offsetWidth; ring.style.animation='';
     const e=$('#l1Timer'); e.dataset.prefix='⏱';
-    timer=makeTimer(e,45, r=>{ $('#l1Bar').style.width=(r/45*100)+'%'; }, ()=>failLevel('No alcanzaste a juntar todos los ingredientes a tiempo.'));
-    timer.start();
-  }
-  function layout(){
-    if(!ring) return; const R=ring.clientWidth/2; const radius=R*0.82;
-    orbits.forEach((o,i)=>{ const a=(i/orbits.length)*Math.PI*2 - Math.PI/2;
-      o.style.left=(R+radius*Math.cos(a))+'px'; o.style.top=(R+radius*Math.sin(a))+'px'; });
-  }
-  function pick(it,t){
-    if(it.ok){ t.classList.add('good'); found++; Audio_.good();
-      const c=centerOf(t); sparkleAt(c.x,c.y); $('#l1Count').textContent=(8-found);
-      if(found===8){ timer.stop(); window.removeEventListener('resize',layout); setTimeout(()=>rewardAndNext(0),500); } }
-    else { t.classList.add('bad'); Audio_.error(); timer.penalty(5); $('#l1Bar').style.width=(timer.get()/45*100)+'%';
-      setTimeout(()=>t.classList.remove('bad'),420); }
-  }
+    timer=makeTimer(e,45, r=>{ $('#l1Bar').style.width=(r/45*100)+'%'; }, ()=>failLevel('No alcanzaste a juntar todos los ingredientes a tiempo.','Se acabó el tiempo'));
+    timer.start(); }
+  function layout(){ if(!ring)return; const R=ring.clientWidth/2, rad=R*0.83;
+    orbits.forEach((o,i)=>{ const a=(i/orbits.length)*Math.PI*2-Math.PI/2; o.style.left=(R+rad*Math.cos(a))+'px'; o.style.top=(R+rad*Math.sin(a))+'px'; }); }
+  function pick(it,t){ if(it.ok){ t.classList.add('good'); found++; Audio_.good(); const c=centerOf(t); sparkleAt(c.x,c.y); $('#l1Count').textContent=(11-found);
+      if(found===11){ timer.stop(); window.removeEventListener('resize',layout); setTimeout(levelDone,500); } }
+    else { t.classList.add('bad'); Audio_.error(); timer.penalty(3); $('#l1Bar').style.width=(timer.get()/45*100)+'%'; setTimeout(()=>t.classList.remove('bad'),420); } }
   return {start};
 })();
 
-/* ════════════ LEVEL 2 ════════════ */
-const Level2 = (()=> {
-  const tasks=[
-    {id:'pelar',  label:'Pelar ajos',      se:'🧄', emoji:'🧄', type:'fill', hint:'Desliza para pelar los ajos'},
-    {id:'cortar', label:'Cortar cebolla',  se:'🧅', emoji:'🧅', type:'cut', cuts:6, hint:'Desliza ↓ para cortar (con ritmo)'},
-    {id:'picar',  label:'Picar ají',       se:'🌶️', emoji:'🌶️', type:'cut', cuts:6, hint:'Desliza ↓ para picar (sin apuro)'},
-    {id:'mezclar',label:'Mezclar aderezo', se:'🥣', emoji:'🥣', type:'fill', hint:'Desliza en círculos para mezclar'},
-  ];
-  let timer, idx, prog, quality, board, lastCut, drag, lastPt, cutStart, frames, guide;
-  function start(){ idx=0; quality=100; $('#l2Bar').style.width='100%'; guide=$('#l2Guide'); renderSteps(); loadTask();
+/* ════════════ NIVEL 2 — Cuchillo afilado ════════════ */
+const Level2=(()=>{ const TOTAL_CUTS=10, TOTAL_FAT=3;
+  let timer,cuts,fatLeft,board,meat,lines,drag,downPt,frames;
+  function start(){ cuts=0; fatLeft=TOTAL_FAT; board=$('#meatBoard'); meat=$('#meatEl');
+    $('#l2Cuts').textContent='0/'+TOTAL_CUTS; $('#l2Fat').textContent='0/'+TOTAL_FAT;
+    // carne: secuencia progresiva 'corte' si existe; si no, una sola imagen 'meat.cortada'
+    const corteSeq = ASSETS.sequences.corte || [];
+    frames = corteSeq.length
+      ? makeFrames(corteSeq, ASSETS.meat.cortada.emoji, 0)
+      : { hasImg:false, node:makeVisual(ASSETS.meat.cortada, 0), setFrac(){} };
+    meat.className = 'meat' + ((corteSeq.length || ASSETS.meat.cortada.img) ? ' has-img' : '');
+    meat.replaceChildren(frames.node);
+    // líneas de corte
+    lines=[]; for(let i=1;i<=TOTAL_CUTS;i++){ const ln=el('div','cut-line'); ln.style.left=(i/(TOTAL_CUTS+1)*100)+'%'; meat.appendChild(ln); lines.push({el:ln,cut:false,x:i/(TOTAL_CUTS+1)}); }
+    // grasa
+    for(let i=0;i<TOTAL_FAT;i++){ const f=el('div','fat'); f.style.left=rand(18,78)+'%'; f.style.top=rand(22,62)+'%';
+      f.onpointerdown=ev=>{ ev.stopPropagation(); removeFat(f); }; meat.appendChild(f); }
+    bind();
+    $('#l2Bar').style.width='100%';
     const e=$('#l2Timer'); e.dataset.prefix='⏱';
-    timer=makeTimer(e,60, r=>{ $('#l2Bar').style.width=(r/60*100)+'%'; }, ()=>failLevel('El aderezo no quedó listo a tiempo. ¡Otra vuelta!'));
-    timer.start(); bindBoard();
+    timer=makeTimer(e,35, r=>{ $('#l2Bar').style.width=(r/35*100)+'%'; }, onTimeUp); timer.start();
   }
-  function renderSteps(){ const c=$('#l2Steps'); c.innerHTML='';
-    const ic={ pelar:ASSETS.ingredients.ajo, cortar:ASSETS.ingredients.cebolla, picar:ASSETS.ingredients.aji, mezclar:ASSETS.ui.bowl };
-    tasks.forEach((t,i)=>{ const d=el('div','l2-step'+(i<idx?' done':i===idx?' active':''));
-      const se=el('span','se'); se.appendChild(makeVisual(ic[t.id]||{emoji:t.se},22)); d.appendChild(se);
-      d.appendChild(document.createTextNode(t.label)); c.appendChild(d); }); }
-  function loadTask(){ const t=tasks[idx]; prog=0; lastCut=0;
-    frames=makeFrames(ASSETS.sequences[t.id], t.emoji, 120);
-    $('#l2Item').replaceChildren(frames.node);
-    const sz = ASSETS.l2ItemSize && ASSETS.l2ItemSize[t.id];   // alto en vh (opcional)
-    if(sz!=null){ const n=frames.node; n.style.width=sz+'vh'; n.style.height=sz+'vh'; n.style.fontSize=(sz*0.78)+'vh'; }
-    $('#l2BoardHint').textContent=t.hint; $('#l2Prog').style.width='0%';
-    $('#l2Instr').innerHTML = t.type==='cut'
-      ? 'Desliza <b>hacia abajo</b> sobre el alimento para cortar. <b>Con ritmo</b>: si vas muy rápido, sale mal picado.'
-      : 'Mantén presionado y <b>desliza</b> sobre la tabla hasta llenar la barra.';
-    showGuide(t.type==='cut' ? 'chop' : (t.id==='mezclar' ? 'stir' : 'swipe'));
-    renderSteps();
+  function removeFat(f){ if(f.dataset.gone)return; f.dataset.gone='1'; fatLeft--; Audio_.plop();
+    const c=centerOf(f); sparkleAt(c.x,c.y); f.style.transition='.25s'; f.style.transform='scale(0)'; f.style.opacity='0'; setTimeout(()=>f.remove(),260);
+    $('#l2Fat').textContent=(TOTAL_FAT-fatLeft)+'/'+TOTAL_FAT; checkWin(); }
+  function toast(m){ const t=$('#l2Toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),650); }
+  function bind(){ drag=false; downPt=null;
+    board.onpointerdown=e=>{ drag=true; downPt={x:e.clientX,y:e.clientY}; board.setPointerCapture(e.pointerId); };
+    board.onpointerup=e=>{ if(!drag)return; drag=false; const dy=e.clientY-downPt.y, dx=e.clientX-downPt.x;
+      if(dy>30 && Math.abs(dy)>Math.abs(dx)*0.7){ tryCut((downPt.x+e.clientX)/2); } };
+    board.onpointercancel=()=>{ drag=false; }; }
+  function tryCut(clientX){ const mr=meat.getBoundingClientRect(); const fx=(clientX-mr.left)/mr.width;
+    let best=null,bd=1; lines.forEach(l=>{ if(l.cut)return; const d=Math.abs(l.x-fx); if(d<bd){bd=d;best=l;} });
+    const tol=0.5/(TOTAL_CUTS+1);
+    if(best && bd<=tol){ best.cut=true; best.el.classList.add('done'); cuts++; Audio_.knife(); knifeFX(clientX);
+      $('#l2Cuts').textContent=cuts+'/'+TOTAL_CUTS; if(frames.hasImg)frames.setFrac(cuts/TOTAL_CUTS); checkWin(); }
+    else { Audio_.error(); timer.penalty(3); toast('¡Corte mal puesto! −3 s'); }
   }
-  const ARROWS={
-    chop:'<svg class="arw arw-chop" viewBox="0 0 60 100" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><line x1="30" y1="12" x2="30" y2="78"/><polyline points="10,56 30,82 50,56"/></svg>',
-    swipe:'<svg class="arw arw-swipe" viewBox="0 0 100 60" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><line x1="14" y1="30" x2="82" y2="30"/><polyline points="58,10 86,30 58,50"/></svg>',
-    stir:'<svg class="arw arw-stir" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M50 18 A32 32 0 1 1 18 50"/><polygon points="48,7 65,18 48,29" fill="currentColor" stroke="none"/></svg>',
-  };
-  function showGuide(type){ if(!guide) return; guide.innerHTML=ARROWS[type]||''; guide.classList.add('show'); }
-  function hideGuide(){ if(guide) guide.classList.remove('show'); }
-  function toast(msg){ const t=$('#l2Toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),600); }
-  function advance(){ Audio_.chime(); const c=centerOf($('#l2Item')); sparkleAt(c.x,c.y); idx++;
-    if(idx>=tasks.length){ timer.stop(); setTimeout(()=>rewardAndNext(1),450); }
-    else { $('#l2Item').style.transform='scale(0)'; setTimeout(()=>{loadTask();$('#l2Item').style.transform='scale(1)';},180); } }
-  function addProg(p){ prog=clamp(prog+p,0,100); $('#l2Prog').style.width=prog+'%'; if(frames) frames.setFrac(prog/100); if(prog>=100) advance(); }
-  function bindBoard(){ board=$('#l2Board'); drag=false; lastPt=null; cutStart=null;
-    board.onpointerdown=e=>{ hideGuide(); drag=true; lastPt={x:e.clientX,y:e.clientY,t:performance.now()}; cutStart=lastPt; board.setPointerCapture(e.pointerId); };
-    board.onpointermove=onMove; board.onpointerup=onUp; board.onpointercancel=onUp;
-    board.tabIndex=0; board.onkeydown=e=>{ if(e.key===' '||e.key==='Enter'){ e.preventDefault(); keyAction(); } }; }
-  function keyAction(){ hideGuide(); const t=tasks[idx];
-    if(t.type==='fill'){ addProg(9); Audio_.knife(); }
-    else { const now=performance.now(); if(now-lastCut<260){ quality=Math.max(40,quality-6); toast('¡Muy rápido!'); }
-      else { addProg(100/t.cuts); Audio_.knife(); knifeFX(); } lastCut=now; } }
-  function onMove(e){ if(!drag) return; const t=tasks[idx]; const now=performance.now();
-    const dx=e.clientX-lastPt.x, dy=e.clientY-lastPt.y; const dist=Math.hypot(dx,dy);
-    const dt=Math.max(8, now-lastPt.t); const speed=dist/dt;
-    if(t.type==='fill'){ if(speed>2.6){ quality=Math.max(40,quality-1.2); toast('¡Más suave!'); }
-      else { addProg(dist*0.16); if(dist>4 && Math.random()<.3) Audio_.knife(); } }
-    lastPt={x:e.clientX,y:e.clientY,t:now}; }
-  function onUp(e){ const t=tasks[idx];
-    if(t.type==='cut' && cutStart){ const dy=e.clientY-cutStart.y, dx=e.clientX-cutStart.x;
-      if(dy>34 && Math.abs(dy)>Math.abs(dx)*0.6){ const now=performance.now();
-        if(now-lastCut<240){ quality=Math.max(40,quality-7); toast('¡Muy rápido!'); }
-        else { addProg(100/t.cuts); Audio_.knife(); knifeFX(); } lastCut=now; } }
-    drag=false; cutStart=null; }
-  function knifeFX(){ const k=$('#l2Knife'); const b=board.getBoundingClientRect();
-    k.style.left=(rand(.35,.65)*b.width)+'px'; k.style.top='30%'; k.style.opacity='1';
-    k.style.transition='none'; k.style.transform='translate(-50%,-50%) rotate(-25deg)';
-    requestAnimationFrame(()=>{ k.style.transition='transform .12s, opacity .2s'; k.style.transform='translate(-50%,10%) rotate(-8deg)'; setTimeout(()=>k.style.opacity='0',130); }); }
+  function knifeFX(clientX){ const k=$('#l2Knife'); const br=board.getBoundingClientRect();
+    k.style.left=(clientX-br.left)+'px'; k.style.top='18%'; k.style.opacity='1'; k.style.transition='none'; k.style.transform='translate(-50%,-50%) rotate(-18deg)';
+    requestAnimationFrame(()=>{ k.style.transition='transform .14s,opacity .25s'; k.style.transform='translate(-50%,120%) rotate(-6deg)'; setTimeout(()=>k.style.opacity='0',150); }); }
+  function checkWin(){ if(cuts>=TOTAL_CUTS && fatLeft<=0){ timer.stop(); Audio_.chime(); const c=centerOf(meat); sparkleAt(c.x,c.y); setTimeout(levelDone,450); } }
+  function onTimeUp(){ if(fatLeft>0) failLevel('Quedó grasa sin retirar. Recuerda limpiar bien la carne.','Carne con grasa');
+    else failLevel('No terminaste de cortar la carne a tiempo.','Se acabó el tiempo'); }
   return {start};
 })();
 
-/* ════════════ LEVEL 3 ════════════ */
-const Level3 = (()=> {
-  const I=ASSETS.ingredients;
-  const order=['aceite','ajo','cebolla','aji','cerdo','chicha'].map(k=>I[k]);
-  let step, cookLoop, heat, done, burn, stirFresh, ended, frames, useImg, drop, ghost3, selected3;
-  function start(){ step=0; ended=false;
-    $('#l3PhaseOrder').classList.remove('hidden'); $('#l3PhaseCook').classList.add('hidden');
-    $('#l3DoneBar').style.width='0%'; $('#l3Timer').dataset.prefix='🔥'; $('#l3Timer').textContent='🔥 Cocción';
-    renderOrder(); }
-  function renderOrder(){
-    const c=$('#l3Order'); c.innerHTML=''; drop=$('#l3Drop'); selected3=null;
-    shuffle(order).forEach(it=>{
-      const b=el('button','order-chip'); b.type='button'; b.dataset.name=it.name;
-      b.appendChild(makeVisual(it,22)); const lbl=el('span'); lbl.textContent=it.name; b.appendChild(lbl);
-      b.onpointerdown=e=>startDragOrder(it,b,e);
-      b.addEventListener('keydown',ev=>{ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); selOrder(it,b); }});
-      c.appendChild(b);
-    });
-    drop.onclick=()=>{ if(selected3) tryDrop(selected3.it, selected3.b); };
-    $('#l3NextName').textContent=order[0].name;
+/* ════════════ NIVEL 3 — Fríe la carne ════════════ */
+const Level3=(()=>{ const NEED=30;
+  let timer,loop,heat,green,badStreak,ended,drop,meatFry,frames,meatState;
+  function rawSpec(){ return ASSETS.meat.cruda; }
+  function friedSpec(){ const m=ASSETS.meat.frita; if(m&&m.img) return m;
+    const cf=ASSETS.sequences.coccionFinal; if(cf&&cf.length) return {name:'Carne frita',emoji:'🥩',img:cf[cf.length-1]}; return m; }
+  function start(){ ended=false; green=0; badStreak=0; heat=52;
+    $('#l3PhaseDrop').classList.remove('hidden'); $('#l3PhaseFry').classList.add('hidden');
+    $('#l3Green').textContent='0/30 s'; $('#l3GreenBar').style.width='0%';
+    drop=$('#l3Drop'); const src=$('#l3MeatSrc'); src.classList.remove('used');
+    setVisual($('#l3MeatSrc .mholder'), rawSpec(), 46);
+    src.onpointerdown=e=>startDrag(src,e);
+    $('#l3Bar').style.width='100%';
+    const e=$('#l3Timer'); e.dataset.prefix='⏱'; timer=makeTimer(e,60, r=>{ $('#l3Bar').style.width=(r/60*100)+'%'; }, ()=>{ if(!ended) endFry(false,'No lograste freír la carne a tiempo.'); }); timer.start();
   }
-  function selOrder(it,b){ $$('#l3Order .order-chip').forEach(x=>x.style.outline=''); selected3={it,b}; b.style.outline='3px solid var(--aji)'; }
-  function moveG(x,y){ if(ghost3){ ghost3.style.left=x+'px'; ghost3.style.top=y+'px'; } }
-  function inDrop(x,y){ const r=drop.getBoundingClientRect(); return x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom; }
-  function startDragOrder(it,b,e){
-    if(b.classList.contains('done')) return;
-    const sx=e.clientX, sy=e.clientY; let moved=false;
-    ghost3=el('div','drag-ghost'); ghost3.appendChild(makeVisual(it,56)); document.body.appendChild(ghost3); moveG(sx,sy);
-    b.classList.add('dragging');
-    const mv=ev=>{ if(Math.hypot(ev.clientX-sx,ev.clientY-sy)>6) moved=true; moveG(ev.clientX,ev.clientY);
-      drop.classList.toggle('over', inDrop(ev.clientX,ev.clientY)); };
-    const up=ev=>{ window.removeEventListener('pointermove',mv); window.removeEventListener('pointerup',up);
-      b.classList.remove('dragging'); drop.classList.remove('over');
-      if(ghost3){ ghost3.remove(); ghost3=null; }
-      if(moved && inDrop(ev.clientX,ev.clientY)) tryDrop(it,b);
-      else if(!moved) selOrder(it,b); };
-    window.addEventListener('pointermove',mv); window.addEventListener('pointerup',up);
-  }
-  function tryDrop(it,b){
-    if(b.classList.contains('done')||ended) return;
-    if(it.name===order[step].name){
-      b.classList.add('done'); b.style.outline=''; selected3=null; Audio_.plop(); step++;
-      const c=centerOf(drop); sparkleAt(c.x,c.y);
-      $('#l3DoneBar').style.width=(step/order.length*50)+'%';
-      if(step>=order.length){ setTimeout(startCooking,450); } else $('#l3NextName').textContent=order[step].name;
-    } else {
-      b.classList.add('wrong'); Audio_.error(); drop.classList.add('shakeit');
-      setTimeout(()=>{ b.classList.remove('wrong'); drop.classList.remove('shakeit'); },420);
-    }
-  }
-  function buildFlames(){ const f=$('#l3Flames'); f.innerHTML='';
-    for(let i=0;i<5;i++){ const fl=el('div','flame'); fl.style.height='20px'; fl.style.animationDelay=(i*.05)+'s'; f.appendChild(fl); } }
-  function startCooking(){ $('#l3PhaseOrder').classList.add('hidden'); $('#l3PhaseCook').classList.remove('hidden');
-    heat=52; done=0; burn=0; stirFresh=0; buildFlames();
-    // imagen progresiva de la olla (si hay assets)
-    useImg=(ASSETS.sequences.cocina||[]).length>0;
-    if(useImg){ frames=makeFrames(ASSETS.sequences.cocina, '', 140); $('#l3FoodImg').replaceChildren(frames.node);
-      $('#l3FoodImg').classList.add('on'); $('#l3Food').classList.add('hidden-food'); }
-    else { frames=null; $('#l3FoodImg').classList.remove('on'); $('#l3Food').classList.remove('hidden-food'); }
+  function startDrag(src,e){ if(src.classList.contains('used'))return; const sx=e.clientX,sy=e.clientY; let moved=false;
+    const g=el('div','drag-ghost'); g.appendChild(makeVisual(rawSpec(),50)); document.body.appendChild(g); mv(e);
+    function mv(ev){ g.style.left=ev.clientX+'px'; g.style.top=ev.clientY+'px'; if(Math.hypot(ev.clientX-sx,ev.clientY-sy)>6)moved=true;
+      const r=drop.getBoundingClientRect(); drop.classList.toggle('over', ev.clientX>=r.left&&ev.clientX<=r.right&&ev.clientY>=r.top&&ev.clientY<=r.bottom); }
+    function up(ev){ window.removeEventListener('pointermove',mv); window.removeEventListener('pointerup',up); g.remove(); drop.classList.remove('over');
+      const r=drop.getBoundingClientRect(); const inside=ev.clientX>=r.left&&ev.clientX<=r.right&&ev.clientY>=r.top&&ev.clientY<=r.bottom;
+      if(inside&&moved){ src.classList.add('used'); beginFry(); } }
+    window.addEventListener('pointermove',mv); window.addEventListener('pointerup',up); }
+  function beginFry(){ Audio_.sizzle();
+    $('#l3PhaseDrop').classList.add('hidden'); $('#l3PhaseFry').classList.remove('hidden');
+    meatFry=$('#l3MeatFry'); meatState='cruda'; setVisual(meatFry, rawSpec(), 56);
     $('#l3Up').onclick=()=>{ heat=clamp(heat+9,0,100); Audio_.sizzle(); };
     $('#l3Down').onclick=()=>{ heat=clamp(heat-11,0,100); };
-    $('#l3Stir').onclick=()=>{ stirFresh=1.6; Audio_.plop(); };
-    cookLoop=setInterval(loop,250); }
-  function loop(){ if(ended) return;
-    heat=clamp(heat + rand(-1.2,2.4), 0, 100); stirFresh=Math.max(0,stirFresh-0.25);
-    const inGreen = heat>=38 && heat<=72, tooHot = heat>78;
-    if(inGreen) done=clamp(done + (stirFresh>0?2.4:1.5), 0, 100); else if(heat<38) done=clamp(done+0.3,0,100);
-    if(tooHot) burn=clamp(burn + (heat-78)*0.16, 0, 100);
-    $('#l3Knob').style.left=heat+'%'; $('#l3HeatTxt').textContent = heat<38?'bajo':heat>72?'alto':'medio';
-    const st=$('#l3Status'), meter=$('#l3Meter');
-    if(inGreen){ st.textContent='✓ ¡Temperatura perfecta!'; st.className='heat-status ok'; meter.classList.add('ok'); }
-    else if(heat<38){ st.textContent='Fuego bajo · sube 🔥'; st.className='heat-status low'; meter.classList.remove('ok'); }
-    else { st.textContent='¡Muy alto! · baja 💨'; st.className='heat-status high'; meter.classList.remove('ok'); }
-    $('#l3DoneTxt').textContent=done.toFixed(0)+'%'; $('#l3Done2').style.width=done+'%';
-    $('#l3BurnTxt').textContent=burn.toFixed(0)+'%'; $('#l3Burn').style.width=burn+'%';
-    $('#l3DoneBar').style.width=(50+done/2)+'%';
-    $$('#l3Flames .flame').forEach(fl=>fl.style.height=(10+heat*0.5)+'px');
-    $('#l3Smoke').classList.toggle('on', tooHot);
-    if(useImg && frames){ frames.setFrac(done/100); }
-    else { const food=$('#l3Food'); food.className='food'+(burn>70?' burnt':done>55?' cooked':''); }
-    if(Math.random()<.25) addBubble();
-    if(burn>=100) end(false); if(done>=100) end(true); }
-  function addBubble(){ const food=$('#l3Food'); const b=el('div','bubble'); const s=rand(5,11);
-    b.style.width=s+'px'; b.style.height=s+'px'; b.style.left=rand(10,110)+'px'; b.style.bottom='6px';
-    b.style.animationDuration=rand(.7,1.3)+'s'; food.appendChild(b); setTimeout(()=>b.remove(),1300); }
-  function end(win){ if(ended) return; ended=true; clearInterval(cookLoop);
-    if(win){ Audio_.chime(); setTimeout(()=>rewardAndNext(2),500); } else failLevel('La carne se quemó. Controla mejor el fuego la próxima vez.'); }
-  return {start};
-})();
-
-/* ════════════ LEVEL 4 ════════════ */
-const Level4 = (()=> {
-  const P=ASSETS.pieces;
-  const pieces=[
-    {id:'frito',   spec:P.frito,   cx:0,   cy:-14},
-    {id:'yuca',    spec:P.yuca,    cx:-46, cy:30},
-    {id:'salsa',   spec:P.salsa,   cx:46,  cy:30},
-    {id:'chifles', spec:P.chifles, cx:0,   cy:54},
-  ];
-  let placed, timer, selected, ghost, plate, ended, progressive, frames;
-  function start(){ placed=0; ended=false; selected=null;
-    plate=$('#l4Plate'); plate.classList.remove('glow'); $('#l4Bar').style.width='100%';
-    [...plate.querySelectorAll('.placed')].forEach(x=>x.remove());
-    // ¿modo imagen progresiva del plato?
-    progressive=(ASSETS.sequences.plato||[]).length>0;
-    if(progressive){ frames=makeFrames(ASSETS.sequences.plato, ASSETS.finalPlate.emoji, 0);
-      $('#l4PlateImg').replaceChildren(frames.node); $('#l4PlateImg').classList.add('on'); frames.setIndex(0); $('#l4Hint').style.display='none'; }
-    else { frames=null; $('#l4PlateImg').classList.remove('on'); $('#l4PlateImg').innerHTML=''; $('#l4Hint').style.display=''; }
-    const tray=$('#l4Tray'); tray.innerHTML='';
-    pieces.forEach(p=>{ const d=el('button','food-piece'); d.type='button'; d.dataset.id=p.id;
-      d.appendChild(makeVisual(p.spec,38)); const fn=el('span','fn'); fn.textContent=p.spec.name; d.appendChild(fn);
-      d.onpointerdown=e=>startDrag(p,d,e);
-      d.addEventListener('keydown',ev=>{ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); selected={p,d}; clearSel(); d.style.outline='3px solid var(--aji)'; }});
-      tray.appendChild(d); });
-    plate.onclick=()=>{ if(selected){ place(selected.p, selected.d); clearSel(); selected=null; } };
-    const e=$('#l4Timer'); e.dataset.prefix='🚶';
-    timer=makeTimer(e,30, r=>{ $('#l4Bar').style.width=(r/30*100)+'%'; }, ()=>{ if(!ended) failLevel('El cliente llegó y el plato no estaba listo. ¡Apúrate la próxima!'); });
-    timer.start();
+    loop=setInterval(tick,250); }
+  function tick(){ if(ended)return; heat=clamp(heat+rand(-1.2,2.4),0,100);
+    const zone = heat<40?'yellow':heat>70?'red':'green';
+    if(zone==='green'){ green=clamp(green+0.25,0,NEED); badStreak=0; }
+    else { badStreak+=0.25; if(badStreak>=3){ badStreak=0; timer.penalty(5); flash(zone); } }
+    // visuals
+    $('#l3Knob').style.left=heat+'%'; $('#l3HeatTxt').textContent=heat<40?'bajo':heat>70?'alto':'medio';
+    $('#l3Green').textContent=Math.floor(green)+'/30 s'; $('#l3GreenTxt').textContent=Math.floor(green)+'/30 s'; $('#l3GreenBar').style.width=(green/NEED*100)+'%';
+    const st=$('#l3Status');
+    if(zone==='green'){ st.textContent='✓ ¡Punto perfecto!'; st.className='done-status green'; }
+    else if(zone==='yellow'){ st.textContent='Falta cocción · sube el fuego 🔥'; st.className='done-status yellow'; }
+    else { st.textContent='¡Se quema! · baja el fuego 💨'; st.className='done-status red'; }
+    const cooked = green>=NEED*0.5;
+    const want = cooked?'frita':'cruda';
+    if(want!==meatState){ meatState=want; setVisual(meatFry, cooked?friedSpec():rawSpec(), 56); }
+    meatFry.classList.toggle('raw', zone==='yellow' && !cooked);
+    meatFry.classList.toggle('burnt', zone==='red');
+    if(zone==='red'&&Math.random()<.5) splash();
+    if(green>=NEED) endFry(true);
   }
-  function clearSel(){ $$('#l4Tray .food-piece').forEach(x=>x.style.outline=''); }
-  function startDrag(p,d,e){ if(d.classList.contains('used')) return;
-    const sx=e.clientX, sy=e.clientY; let moved=false;
-    ghost=el('div','drag-ghost'); ghost.appendChild(makeVisual(p.spec,56)); document.body.appendChild(ghost); moveGhost(sx,sy);
-    const mv=ev=>{ if(Math.hypot(ev.clientX-sx,ev.clientY-sy)>6) moved=true; moveGhost(ev.clientX,ev.clientY); };
-    const up=ev=>{ window.removeEventListener('pointermove',mv); window.removeEventListener('pointerup',up);
-      const r=plate.getBoundingClientRect();
-      const inside=Math.hypot(ev.clientX-(r.left+r.width/2), ev.clientY-(r.top+r.height/2)) < r.width/2;
-      if(ghost){ ghost.remove(); ghost=null; }
-      if(inside && moved) place(p,d);
-      else if(!moved){ selected={p,d}; clearSel(); d.style.outline='3px solid var(--aji)'; } };
-    window.addEventListener('pointermove',mv); window.addEventListener('pointerup',up); }
-  function moveGhost(x,y){ if(ghost){ ghost.style.left=x+'px'; ghost.style.top=y+'px'; } }
-  function place(p,d){ if(d.classList.contains('used')||ended) return;
-    d.classList.add('used'); placed++; $('#l4Hint').style.display='none'; Audio_.plop();
-    if(progressive && frames){ frames.setIndex(placed); }   // ← avanza plato_preparado_N
-    else { const node=makeVisual(p.spec,48); node.classList.add('placed'); node.style.transform=`translate(${p.cx}px,${p.cy}px)`; plate.appendChild(node); }
-    const c=centerOf(plate); sparkleAt(c.x,c.y);
-    if(placed>=pieces.length){ ended=true; timer.stop(); plate.classList.add('glow'); Audio_.chime(); setTimeout(()=>rewardAndNext(3),650); } }
+  function flash(zone){ const st=$('#l3Status'); Audio_.error(); }
+  function splash(){ const pan=$('#l3PhaseFry .pan'); if(!pan)return; const s=el('div','splash');
+    s.style.left='50%'; s.style.top='40%'; s.style.setProperty('--dx',rand(-40,40)+'px'); s.style.setProperty('--dy',rand(-30,-10)+'px'); pan.appendChild(s); setTimeout(()=>s.remove(),500); }
+  function endFry(win,msg){ if(ended)return; ended=true; clearInterval(loop); timer.stop();
+    if(win){ Audio_.chime(); setTimeout(levelDone,500); } else failLevel(msg||'La carne no quedó en su punto.','Fritura fallida'); }
   return {start};
 })();
 
-/* ════════════ FINAL ════════════ */
+/* ════════════ NIVEL 4 — Sirve el desayuno ════════════ */
+const Level4=(()=>{ const P=ASSETS.pieces; const KEYS=['arroz','carne','camote','platano','tamal']; const NPLATES=5;
+  let timer,plates,done,ghost;
+  function start(){ done=0; $('#l4Done').textContent='0/'+NPLATES;
+    const row=$('#platesRow'); row.innerHTML=''; plates=[];
+    for(let i=0;i<NPLATES;i++){ const pl=el('div','plate5'); const num=el('div','pnum'); num.textContent=(i+1); pl.appendChild(num);
+      const slots=el('div','slots'); const slotEls={};
+      KEYS.forEach(k=>{ const s=el('div','slot'); s.appendChild(makeVisual(P[k],24)); slots.appendChild(s); slotEls[k]=s; });
+      pl.appendChild(slots); row.appendChild(pl); plates.push({el:pl,have:new Set(),slots:slotEls}); }
+    const tray=$('#tray5'); tray.innerHTML='';
+    KEYS.forEach(k=>{ const s=el('button','src5'); s.type='button'; s.dataset.k=k;
+      s.appendChild(makeVisual(P[k],34)); const fn=el('span','fn'); fn.textContent=P[k].name; s.appendChild(fn);
+      s.onpointerdown=e=>startDrag(k,e); tray.appendChild(s); });
+    const e=$('#l4Timer'); e.dataset.prefix='🚶'; $('#l4Bar').style.width='100%';
+    timer=makeTimer(e,35, r=>{ $('#l4Bar').style.width=Math.min(100,r/35*100)+'%'; }, ()=>{ if(done<NPLATES) failLevel('Quedaron platos incompletos. Los clientes no esperan.','Pedidos incompletos'); }); timer.start();
+  }
+  function startDrag(k,e){ const sx=e.clientX,sy=e.clientY; let moved=false;
+    ghost=el('div','drag-ghost'); ghost.appendChild(makeVisual(P[k],50)); document.body.appendChild(ghost); move(e.clientX,e.clientY);
+    const mv=ev=>{ if(Math.hypot(ev.clientX-sx,ev.clientY-sy)>6)moved=true; move(ev.clientX,ev.clientY); };
+    const up=ev=>{ window.removeEventListener('pointermove',mv); window.removeEventListener('pointerup',up); if(ghost){ghost.remove();ghost=null;}
+      if(!moved)return; const pl=plateAt(ev.clientX,ev.clientY); if(pl)drop(k,pl); };
+    window.addEventListener('pointermove',mv); window.addEventListener('pointerup',up); }
+  function move(x,y){ if(ghost){ghost.style.left=x+'px';ghost.style.top=y+'px';} }
+  function plateAt(x,y){ return plates.find(p=>{ const r=p.el.getBoundingClientRect(); return x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom; }); }
+  function drop(k,pl){ if(pl.have.has(k)){ Audio_.error(); timer.penalty(5); pl.el.animate?.([{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:300}); return; }
+    pl.have.add(k); pl.slots[k].classList.add('on'); Audio_.plop();
+    if(pl.have.size===KEYS.length){ pl.el.classList.add('done'); done++; $('#l4Done').textContent=done+'/'+NPLATES; Audio_.chime(); const c=centerOf(pl.el); sparkleAt(c.x,c.y);
+      timer.add(3); bonus3(pl.el); const tm=$('#l4Timer'); tm.classList.add('bonus-flash'); setTimeout(()=>tm.classList.remove('bonus-flash'),500);
+      if(done===NPLATES){ timer.stop(); setTimeout(levelDone,500); } } }
+  function bonus3(node){ const r=node.getBoundingClientRect(); const b=el('div','bonus'); b.textContent='+3 s';
+    b.style.left=(r.left+r.width/2)+'px'; b.style.top=r.top+'px'; document.body.appendChild(b); setTimeout(()=>b.remove(),900); }
+  return {start};
+})();
+
+/* ════════════ FINAL + RANKING ════════════ */
 function showFinal(){
-  setVisual($('#finalPlate'), ASSETS.finalPlate, 130);
-  const fb=$('#finalBadges'); fb.innerHTML='';
-  ASSETS.badges.forEach(b=>{ const d=el('div','fb'); d.appendChild(makeVisual(b,34)); fb.appendChild(d); });
-  $('#finalCulture').textContent=FINAL_MSG; showOverlay('ovFinal'); Audio_.fanfare(); confetti($('#ovFinal'),70);
+  Game.totalSeconds=Math.round((Date.now()-Game.startTime)/1000);
+  setVisual($('#finalPlate'), ASSETS.finalPlate, 120);
+  const fb=$('#finalBadges'); fb.innerHTML=''; ASSETS.badges.forEach(b=>{ const d=el('div','fb'); d.appendChild(makeVisual(b,32)); fb.appendChild(d); });
+  $('#finalTime').textContent='Cocinaste en '+fmtTime(Game.totalSeconds)+'. Deja tu nombre para el ranking:';
+  $('#finalCulture').textContent=FINAL_MSG;
+  $('#finalNameStep').style.display=''; $('#finalRankLine').classList.add('hidden'); $('#finalReplay').classList.add('hidden');
+  showOverlay('ovFinal'); Audio_.fanfare(); confetti($('#ovFinal'),70);
 }
-$('#finalReplay').onclick=()=>{ State.level=0; State.badges=[false,false,false,false]; updateBadgesMini(); hideOverlay('ovFinal'); showScreen('scr-start'); };
+function fmtTime(s){ return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
+async function submitRanking(name){
+  const url=ASSETS.ranking&&ASSETS.ranking.endpoint; let pct=null, top=null;
+  if(url){ try{
+    const res=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({name:name,seconds:Game.totalSeconds,points:Game.points})});
+    const data=await res.json().catch(()=>null);
+    if(data){ if(typeof data.betterThan==='number')pct=data.betterThan; if(Array.isArray(data.top))top=data.top; }
+  }catch(e){} }
+  if(pct==null) pct=clamp(100-Math.round(Game.totalSeconds/3),50,99);  // estimación local
+  return {pct, top};
+}
+// Datos de ejemplo del ranking (reemplázalos por los reales de tu Google Sheets)
+const RANK_PLACEHOLDER=[ {name:'Doña Peto',seconds:92}, {name:'Lucía',seconds:118}, {name:'Carlos',seconds:134}, {name:'María',seconds:151}, {name:'José',seconds:168}, {name:'Rosa',seconds:187} ];
+function renderRankTable(name, secs, top){
+  const isReal = top && top.length;
+  const rows = (isReal ? top.map(r=>({name:r.name,seconds:r.seconds})) : RANK_PLACEHOLDER.slice());
+  rows.push({name:name, seconds:secs, me:true});
+  rows.sort((a,b)=>a.seconds-b.seconds);
+  const top8=rows.slice(0,5);
+  const cont=$('#finalRankTable'); cont.innerHTML='';
+  const tbl=el('table','rank-table');
+  tbl.innerHTML='<thead><tr><th>#</th><th>Jugador</th><th style="text-align:right">Tiempo</th></tr></thead>';
+  const tb=el('tbody');
+  top8.forEach((r,idx)=>{ const tr=el('tr'); if(r.me)tr.className='me';
+    tr.innerHTML=`<td class="p">${idx+1}</td><td>${r.me?'★ ':''}${escapeHtml(r.name)}</td><td class="t">${fmtTime(r.seconds)}</td>`; tb.appendChild(tr); });
+  tbl.appendChild(tb); cont.appendChild(tbl);
+  if(!isReal){ const note=el('div','rank-ph'); note.textContent='Tabla de ejemplo — se conectará a tu Google Sheets.'; cont.appendChild(note); }
+  cont.classList.remove('hidden');
+}
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+$('#finalSubmit').onclick=async function(){
+  const name=($('#finalName').value||'').trim()||'Aprendiz'; this.disabled=true; this.textContent='Guardando…';
+  const {pct, top}=await submitRanking(name);
+  $('#finalNameStep').style.display='none';
+  $('#finalRankTxt').textContent='¡'+name+', cocinaste mejor que el '+pct+'% de los jugadores!';
+  $('#finalRankLine').classList.remove('hidden');
+  renderRankTable(name, Game.totalSeconds, top);
+  $('#finalReplay').classList.remove('hidden');
+};
+$('#finalReplay').onclick=()=>{ flowStep=0; Game.points=0; setPoints(0); Game.startTime=Date.now();
+  showProgressHUD(false); clearHighlight();
+  $('#finalRankTable').classList.add('hidden'); $('#finalRankLine').classList.add('hidden');
+  const fs=$('#finalSubmit'); fs.disabled=false; fs.textContent='Guardar'; $('#finalName').value='';
+  hideOverlay('ovFinal'); showScreen('scr-start'); };
 
 /* ════════════ BOOT ════════════ */
-$('#startBtn').onclick=()=>{ Audio_.good(); BGM.start(); goToLevelIntro(0); };
-$('#muteBtn').onclick=function(){ const m=Audio_.toggleMute(); BGM.setMuted(m); this.textContent=m?'🔇':'🔊'; this.setAttribute('aria-label', m?'Activar sonido':'Silenciar sonido'); };
-$('#fsBtn').onclick=function(){
-  try{
-    const root=document.documentElement;
-    if(!document.fullscreenElement && !document.webkitFullscreenElement){
-      (root.requestFullscreen||root.webkitRequestFullscreen||function(){}).call(root);
-    } else {
-      (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document);
-    }
-  }catch(e){}
-};
-document.addEventListener('fullscreenchange',()=>{ const b=$('#fsBtn'); if(b) b.setAttribute('aria-label', document.fullscreenElement?'Salir de pantalla completa':'Pantalla completa'); });
-(function steam(){ const host=$('#startSteam'); if(!host) return;
-  setInterval(()=>{ if(!$('#scr-start').classList.contains('active')) return;
-    const s=el('div','steam'); s.style.left=rand(30,70)+'%'; s.style.bottom='10%'; s.style.width=s.style.height=rand(8,16)+'px';
-    s.style.animationDuration=rand(3,5)+'s'; host.appendChild(s); setTimeout(()=>s.remove(),5000); },500); })();
+$('#startBtn').onclick=()=>{ Audio_.good(); BGM.start(); Game.startTime=Date.now(); flowStep=0; run(); };
+$('#muteBtn').onclick=function(){ const m=Audio_.toggleMute(); BGM.setMuted(m); this.textContent=m?'🔇':'🔊'; this.setAttribute('aria-label',m?'Activar sonido':'Silenciar sonido'); };
+$('#fsBtn').onclick=function(){ try{ const r=document.documentElement;
+  if(!document.fullscreenElement&&!document.webkitFullscreenElement){ (r.requestFullscreen||r.webkitRequestFullscreen||function(){}).call(r); }
+  else { (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document); } }catch(e){} };
 
-buildBadgesMini();
 hydrateUI();
+setPoints(0);
 BGM.setup();
 </script>
 </body>
