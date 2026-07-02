@@ -151,6 +151,11 @@
     border:2px solid #d9c79a;box-shadow:0 2px 5px rgba(0,0,0,.35);cursor:pointer;z-index:4;display:grid;place-items:center;font-size:13px}
   .fat::after{content:"✕";color:#b23a1e;font-weight:800;font-size:11px;opacity:0;transition:.15s}
   .fat:hover::after{opacity:.7}
+  .fat.fat-img{width:38px;height:38px;background:none;border:none;box-shadow:none}
+  .fat.fat-img .vis{width:100%;height:100%;
+  -webkit-filter: drop-shadow(5px 5px 5px #222);
+  filter: drop-shadow(5px 5px 5px #222);
+  }
   .knife-fx{position:absolute;font-size:42px;pointer-events:none;opacity:0;filter:drop-shadow(0 4px 6px #000);z-index:5}
   .board-toast{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:var(--ladrillo);color:#fff;
     padding:6px 14px;border-radius:999px;font-size:12px;font-weight:700;opacity:0;transition:.2s;pointer-events:none;z-index:6}
@@ -189,9 +194,12 @@
   .l3-meat-src{margin-top:14px;display:flex;justify-content:center}
   .meat-chip{padding:12px 16px;border-radius:15px;cursor:grab;touch-action:none;text-align:center;
     background:linear-gradient(180deg,#6b4426,#43291590);border:1.5px solid rgba(236,187,79,.25);display:flex;flex-direction:column;align-items:center;gap:4px}
-  .meat-chip .vis{width:46px;height:46px;font-size:42px}
+  .meat-chip .vis{width:15vw !important;height:auto;font-size:42px}
   .meat-chip .fn{font-size:11px;color:var(--crema-dim);font-weight:600}
+  .meat-fry .vis{width:15vw !important;height:auto;font-size:42px}
   .meat-chip.used{opacity:.3;pointer-events:none}
+  .meat-chip .vis, .meat-chip img, .src5 .vis, .src5 img{-webkit-user-drag:none;user-select:none;-webkit-user-select:none;pointer-events:none}
+  .meat-chip, .src5{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 
   /* L4 five plates */
   .plates-row{flex:1;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;align-content:center;min-height:200px}
@@ -429,15 +437,15 @@ const ASSETS = {
     cebolla: { name:'Cebolla',        emoji:'🧅', img:"cebolla.webp" },
     aji:     { name:'Ají amarillo',   emoji:'🌶️', img:"aji.webp" },
     camote:  { name:'Camote',         emoji:'🍠', img:"camote.webp" },
-    chicha:  { name:'Chicha de jora', emoji:'🍺', img:"chicha.webp" },
+    //chicha:  { name:'Chicha de jora', emoji:'🍺', img:"chicha.webp" },
     arroz:   { name:'Arroz',          emoji:'🍚', img:"arroz.webp" },
-    aceite:  { name:'Aceite',         emoji:'🫗', img:"aceite.webp" },
+    aceite:  { name:'Aceite',         emoji:'🔥', img:"aceite.webp" },
     platano: { name:'Plátano',        emoji:'🍌', img:"platano.webp" },
-    tamal:   { name:'Tamales',        emoji:'🫔', img:"tamal.webp" },
-    achiote: { name:'Achiote',        emoji:'🫙', img:"achiote.webp" },
+    tamal:   { name:'Tamales',        emoji:'🔥', img:"tamal.webp" },
+    achiote: { name:'Achiote',        emoji:'🔥', img:"achiote.webp" },
     // incorrectos
-    pimiento:{ name:'Pimiento',       emoji:'🫑', img:"pimiento.webp" },
-    menestra:{ name:'Menestra',       emoji:'🫘', img:"menestra.webp" },
+    pimiento:{ name:'Pimiento',       emoji:'🔥', img:"pimiento.webp" },
+    menestra:{ name:'Menestra',       emoji:'🔥', img:"menestra.webp" },
     pescado: { name:'Pescado',        emoji:'🐟', img:"pescado.webp" },
     limon:   { name:'Limón',          emoji:'🍋', img:"limon.webp" },
     yuca:    { name:'Yuca',           emoji:'🥔', img:"yuca.webp" },
@@ -446,18 +454,18 @@ const ASSETS = {
 
   // Nivel 4 — componentes del plato (los 5)
   pieces: {
-    arroz:  { name:'Arroz',  emoji:'🍚', img:null },
-    carne:  { name:'Carne',  emoji:'🥩', img:null },
-    camote: { name:'Camote', emoji:'🍠', img:null },
-    platano:{ name:'Plátano',emoji:'🍌', img:null },
-    tamal:  { name:'Tamal',  emoji:'🫔', img:null },
+    arroz:  { name:'Arroz',  emoji:'🍚', img:"plato_arroz.webp" },
+    carne:  { name:'Carne',  emoji:'🥩', img:"plato_carne.webp" },
+    camote: { name:'Camote', emoji:'🍠', img:"plato_camote.webp" },
+    platano:{ name:'Plátano',emoji:'🍌', img:"plato_platano.webp" },
+    tamal:  { name:'Tamal',  emoji:'🔥', img:"plato_tamal.webp" },
   },
 
   badges: [
-    { name:'Conocedor del mercado', emoji:'🛒', img:null },
-    { name:'Experto en el corte',   emoji:'🔪', img:null },
-    { name:'Guardián del sabor',    emoji:'🛡️', img:null },
-    { name:'Embajador del plato',   emoji:'🍽️', img:null },
+    { name:'Conocedor del mercado', emoji:'🛒', img:"badge_0.webp" },
+    { name:'Experto en el corte',   emoji:'🔪', img:"badge_1.webp" },
+    { name:'Guardián del sabor',    emoji:'🛡️', img:"badge_2.webp" },
+    { name:'Embajador del plato',   emoji:'🍽️', img:"badge_3.webp" },
   ],
   finalPlate: { name:'Frito piurano servido', emoji:'🍽️', img:"final.webp" },
 
@@ -465,27 +473,28 @@ const ASSETS = {
   // cortada -> Nivel 2 (la carne sobre la tabla). cruda -> Nivel 3 antes de freír.
   // frita   -> Nivel 3 cuando ya está cocida.
   meat: {
-    cortada: { name:'Carne cortada',  emoji:'🥩', img:null },
-    cruda:   { name:'Carne sin freír', emoji:'🥩', img:null },
-    frita:   { name:'Carne frita',    emoji:'🥩', img:null },
+    cortada: { name:'Carne cortada',  emoji:'🥩', img:"cerdo_0.webp" },
+    cruda:   { name:'Carne sin freír', emoji:'🥩', img:"cerdo_0.webp" },
+    frita:   { name:'Carne frita',    emoji:'🥩', img:"cerdo_3.webp" },
+    grasa:   { name:'Grasa',          emoji:'🫧', img:"grasa.webp" },
   },
 
   // Íconos de interfaz
   ui: {
-    basket:  { emoji:'🧺', img:null }, knife:{ emoji:'🔪', img:null }, fat:{ emoji:'🫧', img:null },
+    basket:  { emoji:'🧺', img:null }, knife:{ emoji:'🔪', img:null }, fat:{ emoji:'🔥', img:null },
     fireUp:  { emoji:'🔥', img:null }, fireDown:{ emoji:'💨', img:null },
     trophy:  { emoji:'🏆', img:null }, fail:{ emoji:'😅', img:null },
   },
 
-  // Secuencias progresivas (vacías = usa emoji/CSS). Ej de corte: ['cerdo_0','cerdo_1',...'cerdo_10']
-  sequences: { corte:[], coccionFinal:["cerdo_cocinado.webp"] },
+  // Secuencias progresivas (vacías = usa emoji/imagen fija). corte -> Nivel 2; fritura -> Nivel 3 (cerdo crudo->frito).
+  sequences: { corte:["cerdo_crudo.webp","cerdo_crudo.webp","cerdo_crudo.webp","cerdo_crudo.webp","cerdo_crudo.webp","cerdo_crudo.webp","cerdo_crudo.webp","cerdo_crudo.webp","cerdo_crudo.webp","cerdo_crudo.webp","cerdo_0.webp"], coccionFinal:["cerdo_3.webp"], fritura:["cerdo_0.webp","cerdo_1.webp","cerdo_2.webp","cerdo_3.webp"] },
 
   // Música de fondo (todo el juego). Prioridad: mp3 > youtube > melodía sintetizada.
-  music: { mp3: "src/fondo.mp3", youtube: null, volume: 0.6 },
+  music: { mp3: "src/fondo.mp3", youtube: null, volume: 0.4 },
 
-  // Ranking en Google Sheets: pega aquí la URL del Apps Script Web App (termina en /exec).
-  // Si es null, el ranking funciona local (sin guardar). Ver README para el código del Apps Script.
-  ranking: { endpoint: null },
+  // Ranking: 'endpoint' debe ser una URL que ACEPTE POST (NO el link para compartir la hoja).
+  // Excel Online -> flujo de Power Automate (HTTP). Google Sheets -> Apps Script (/exec). Ver README.
+  ranking: { endpoint: "https://script.google.com/macros/s/AKfycbwqFRKqNDnvfEChFdlwCLpjgMZrlFRelf01JP-zRSlcMpo-wd2fwQd_TnSRwMuwlk0l/exec" },
 };
 if (window.__GAME_ASSETS__) Object.assign(ASSETS, window.__GAME_ASSETS__);
 
@@ -700,9 +709,9 @@ $('#ovFailBtn').onclick=()=>{ hideOverlay('ovFail'); [Level1,Level2,Level3,Level
 
 /* ════════════ NIVEL 1 ════════════ */
 const Level1=(()=>{ const I=ASSETS.ingredients; let timer,found,ring,orbits=[];
-  const correctKeys=['cerdo','ajo','cebolla','aji','camote','chicha','arroz','aceite','platano','tamal','achiote'];
+  const correctKeys=['cerdo','ajo','cebolla','aji','camote',/*'chicha',*/'arroz','aceite','platano','tamal','achiote'];
   const wrongKeys=['pimiento','menestra','pescado','limon','yuca','culantro'];
-  function start(){ found=0; ring=$('#l1Ring'); ring.innerHTML=''; orbits=[]; $('#l1Bar').style.width='100%'; $('#l1Count').textContent='11';
+  function start(){ found=0; ring=$('#l1Ring'); ring.innerHTML=''; orbits=[]; $('#l1Bar').style.width='100%'; $('#l1Count').textContent=/*'11'*/'10';
     const items=shuffle([...correctKeys.map(k=>({...I[k],ok:true})),...wrongKeys.map(k=>({...I[k],ok:false}))]);
     items.forEach(it=>{ const o=el('div','orbit'); const t=el('button','l1-tile'); t.type='button'; t.setAttribute('aria-label',it.name);
       const c=el('span','l1-counter'); c.appendChild(makeVisual(it,34)); const nm=el('span','nm'); nm.textContent=it.name; c.appendChild(nm); t.appendChild(c);
@@ -714,8 +723,8 @@ const Level1=(()=>{ const I=ASSETS.ingredients; let timer,found,ring,orbits=[];
     timer.start(); }
   function layout(){ if(!ring)return; const R=ring.clientWidth/2, rad=R*0.83;
     orbits.forEach((o,i)=>{ const a=(i/orbits.length)*Math.PI*2-Math.PI/2; o.style.left=(R+rad*Math.cos(a))+'px'; o.style.top=(R+rad*Math.sin(a))+'px'; }); }
-  function pick(it,t){ if(it.ok){ t.classList.add('good'); found++; Audio_.good(); const c=centerOf(t); sparkleAt(c.x,c.y); $('#l1Count').textContent=(11-found);
-      if(found===11){ timer.stop(); window.removeEventListener('resize',layout); setTimeout(levelDone,500); } }
+  function pick(it,t){ if(it.ok){ t.classList.add('good'); found++; Audio_.good(); const c=centerOf(t); sparkleAt(c.x,c.y); $('#l1Count').textContent=(/*11*/10-found);
+      if(found===/*11*/10){ timer.stop(); window.removeEventListener('resize',layout); setTimeout(levelDone,500); } }
     else { t.classList.add('bad'); Audio_.error(); timer.penalty(3); $('#l1Bar').style.width=(timer.get()/45*100)+'%'; setTimeout(()=>t.classList.remove('bad'),420); } }
   return {start};
 })();
@@ -736,6 +745,7 @@ const Level2=(()=>{ const TOTAL_CUTS=10, TOTAL_FAT=3;
     lines=[]; for(let i=1;i<=TOTAL_CUTS;i++){ const ln=el('div','cut-line'); ln.style.left=(i/(TOTAL_CUTS+1)*100)+'%'; meat.appendChild(ln); lines.push({el:ln,cut:false,x:i/(TOTAL_CUTS+1)}); }
     // grasa
     for(let i=0;i<TOTAL_FAT;i++){ const f=el('div','fat'); f.style.left=rand(18,78)+'%'; f.style.top=rand(22,62)+'%';
+      const gsp=ASSETS.meat.grasa; if(gsp&&gsp.img){ f.classList.add('fat-img'); f.appendChild(makeVisual(gsp,36)); }
       f.onpointerdown=ev=>{ ev.stopPropagation(); removeFat(f); }; meat.appendChild(f); }
     bind();
     $('#l2Bar').style.width='100%';
@@ -769,7 +779,7 @@ const Level2=(()=>{ const TOTAL_CUTS=10, TOTAL_FAT=3;
 
 /* ════════════ NIVEL 3 — Fríe la carne ════════════ */
 const Level3=(()=>{ const NEED=30;
-  let timer,loop,heat,green,badStreak,ended,drop,meatFry,frames,meatState;
+  let timer,loop,heat,green,badStreak,ended,drop,meatFry,frames,meatState,friFrames;
   function rawSpec(){ return ASSETS.meat.cruda; }
   function friedSpec(){ const m=ASSETS.meat.frita; if(m&&m.img) return m;
     const cf=ASSETS.sequences.coccionFinal; if(cf&&cf.length) return {name:'Carne frita',emoji:'🥩',img:cf[cf.length-1]}; return m; }
@@ -782,17 +792,20 @@ const Level3=(()=>{ const NEED=30;
     $('#l3Bar').style.width='100%';
     const e=$('#l3Timer'); e.dataset.prefix='⏱'; timer=makeTimer(e,60, r=>{ $('#l3Bar').style.width=(r/60*100)+'%'; }, ()=>{ if(!ended) endFry(false,'No lograste freír la carne a tiempo.'); }); timer.start();
   }
-  function startDrag(src,e){ if(src.classList.contains('used'))return; const sx=e.clientX,sy=e.clientY; let moved=false;
+  function startDrag(src,e){ if(src.classList.contains('used'))return; if(e.cancelable)e.preventDefault(); try{src.setPointerCapture(e.pointerId);}catch(_){} const sx=e.clientX,sy=e.clientY; let moved=false;
     const g=el('div','drag-ghost'); g.appendChild(makeVisual(rawSpec(),50)); document.body.appendChild(g); mv(e);
     function mv(ev){ g.style.left=ev.clientX+'px'; g.style.top=ev.clientY+'px'; if(Math.hypot(ev.clientX-sx,ev.clientY-sy)>6)moved=true;
       const r=drop.getBoundingClientRect(); drop.classList.toggle('over', ev.clientX>=r.left&&ev.clientX<=r.right&&ev.clientY>=r.top&&ev.clientY<=r.bottom); }
-    function up(ev){ window.removeEventListener('pointermove',mv); window.removeEventListener('pointerup',up); g.remove(); drop.classList.remove('over');
+    function up(ev){ src.removeEventListener('pointermove',mv); src.removeEventListener('pointerup',up); src.removeEventListener('pointercancel',up); try{src.releasePointerCapture(e.pointerId);}catch(_){} g.remove(); drop.classList.remove('over');
       const r=drop.getBoundingClientRect(); const inside=ev.clientX>=r.left&&ev.clientX<=r.right&&ev.clientY>=r.top&&ev.clientY<=r.bottom;
       if(inside&&moved){ src.classList.add('used'); beginFry(); } }
-    window.addEventListener('pointermove',mv); window.addEventListener('pointerup',up); }
+    src.addEventListener('pointermove',mv); src.addEventListener('pointerup',up); src.addEventListener('pointercancel',up); }
   function beginFry(){ Audio_.sizzle();
     $('#l3PhaseDrop').classList.add('hidden'); $('#l3PhaseFry').classList.remove('hidden');
-    meatFry=$('#l3MeatFry'); meatState='cruda'; setVisual(meatFry, rawSpec(), 56);
+    meatFry=$('#l3MeatFry'); meatState='cruda';
+    const friSeq=ASSETS.sequences.fritura||[];
+    if(friSeq.length){ friFrames=makeFrames(friSeq, ASSETS.meat.cruda.emoji, 56); meatFry.replaceChildren(friFrames.node); friFrames.setFrac(0); }
+    else { friFrames=null; setVisual(meatFry, rawSpec(), 56); }
     $('#l3Up').onclick=()=>{ heat=clamp(heat+9,0,100); Audio_.sizzle(); };
     $('#l3Down').onclick=()=>{ heat=clamp(heat-11,0,100); };
     loop=setInterval(tick,250); }
@@ -809,7 +822,7 @@ const Level3=(()=>{ const NEED=30;
     else { st.textContent='¡Se quema! · baja el fuego 💨'; st.className='done-status red'; }
     const cooked = green>=NEED*0.5;
     const want = cooked?'frita':'cruda';
-    if(want!==meatState){ meatState=want; setVisual(meatFry, cooked?friedSpec():rawSpec(), 56); }
+    if(friFrames){ friFrames.setFrac(green/NEED); } else if(want!==meatState){ meatState=want; setVisual(meatFry, cooked?friedSpec():rawSpec(), 56); }
     meatFry.classList.toggle('raw', zone==='yellow' && !cooked);
     meatFry.classList.toggle('burnt', zone==='red');
     if(zone==='red'&&Math.random()<.5) splash();
@@ -863,7 +876,7 @@ function showFinal(){
   setVisual($('#finalPlate'), ASSETS.finalPlate, 120);
   const fb=$('#finalBadges'); fb.innerHTML=''; ASSETS.badges.forEach(b=>{ const d=el('div','fb'); d.appendChild(makeVisual(b,32)); fb.appendChild(d); });
   $('#finalTime').textContent='Cocinaste en '+fmtTime(Game.totalSeconds)+'. Deja tu nombre para el ranking:';
-  $('#finalCulture').textContent=FINAL_MSG;
+  $('#finalCulture').textContent=FINAL_MSG; $('#finalCulture').style.display='';
   $('#finalNameStep').style.display=''; $('#finalRankLine').classList.add('hidden'); $('#finalReplay').classList.add('hidden');
   showOverlay('ovFinal'); Audio_.fanfare(); confetti($('#ovFinal'),70);
 }
@@ -893,14 +906,13 @@ function renderRankTable(name, secs, top){
   top8.forEach((r,idx)=>{ const tr=el('tr'); if(r.me)tr.className='me';
     tr.innerHTML=`<td class="p">${idx+1}</td><td>${r.me?'★ ':''}${escapeHtml(r.name)}</td><td class="t">${fmtTime(r.seconds)}</td>`; tb.appendChild(tr); });
   tbl.appendChild(tb); cont.appendChild(tbl);
-  if(!isReal){ const note=el('div','rank-ph'); note.textContent='Tabla de ejemplo — se conectará a tu Google Sheets.'; cont.appendChild(note); }
   cont.classList.remove('hidden');
 }
 function escapeHtml(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 $('#finalSubmit').onclick=async function(){
   const name=($('#finalName').value||'').trim()||'Aprendiz'; this.disabled=true; this.textContent='Guardando…';
   const {pct, top}=await submitRanking(name);
-  $('#finalNameStep').style.display='none';
+  $('#finalNameStep').style.display='none'; $('#finalCulture').style.display='none';
   $('#finalRankTxt').textContent='¡'+name+', cocinaste mejor que el '+pct+'% de los jugadores!';
   $('#finalRankLine').classList.remove('hidden');
   renderRankTable(name, Game.totalSeconds, top);
