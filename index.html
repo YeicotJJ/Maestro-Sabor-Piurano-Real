@@ -234,6 +234,11 @@
     background:radial-gradient(circle at 38% 30%, var(--aji-soft), var(--naranja) 70%, #9a4e12);border:4px solid var(--oro);
     box-shadow:0 0 40px rgba(244,182,22,.6),inset 0 -6px 14px rgba(0,0,0,.35);animation:badgePop .7s cubic-bezier(.2,1.4,.4,1)}
   .badge-big .vis{width:72px;height:72px;font-size:52px}
+  .recipe-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:360px;margin:6px auto 4px}
+  .recipe-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;border-radius:12px;
+    background:linear-gradient(180deg, rgba(60,36,18,.7), rgba(40,24,12,.7));border:1.5px solid rgba(236,187,79,.22)}
+  .recipe-item .vis{width:44px;height:44px;font-size:36px}
+  .recipe-item .rn{font-size:11px;color:var(--crema);font-weight:600;text-align:center;line-height:1.15}
   .badge-big::before{content:"";position:absolute;inset:-14px;border-radius:50%;border:2px dashed rgba(236,187,79,.4);animation:spin 14s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
   @keyframes badgePop{0%{transform:scale(0) rotate(-40deg);opacity:0}100%{transform:scale(1) rotate(0);opacity:1}}
@@ -391,6 +396,13 @@
     <div class="pts-pop" id="ovPts">+5 puntos</div>
     <div class="culture" id="ovCulture"></div>
     <button class="btn" id="ovRewardBtn">Continuar</button>
+  </div></div>
+
+  <div class="overlay" id="ovRecipe"><div class="card">
+    <h2 class="unlock" style="margin:0">La receta del frito piurano</h2>
+    <p class="tag" style="margin:0;color:var(--crema-dim)">Estos son los ingredientes que debes escoger:</p>
+    <div class="recipe-grid" id="recipeGrid"></div>
+    <button class="btn" id="ovRecipeBtn">¡A cocinar!</button>
   </div></div>
 
   <div class="overlay" id="ovFail"><div class="card">
@@ -671,9 +683,21 @@ const Narrator = (()=> {
   return { say };
 })();
 
+/* ---------- Receta (ingredientes del frito piurano) ---------- */
+const RECIPE_KEYS = ['cerdo','ajo','cebolla','aji','camote','arroz','aceite','platano','tamal','achiote'];
+function showRecipe(onDone){
+  const g=$('#recipeGrid'); g.innerHTML='';
+  RECIPE_KEYS.forEach(k=>{ const it=ASSETS.ingredients[k]; if(!it)return;
+    const cell=el('div','recipe-item'); cell.appendChild(makeVisual(it,44));
+    const nm=el('div','rn'); nm.textContent=it.name; cell.appendChild(nm); g.appendChild(cell); });
+  showOverlay('ovRecipe');
+  $('#ovRecipeBtn').onclick=()=>{ hideOverlay('ovRecipe'); onDone&&onDone(); };
+}
+
 /* ════════════ SECUENCIA DEL JUEGO ════════════ */
 const FLOW = [
   ()=>Narrator.say(DIALOG.intro, run, true),
+  ()=>showRecipe(run),
   ()=>Narrator.say(DIALOG.l1, ()=>startLevel(0)),
   ()=>reward(0),
   ()=>Narrator.say(DIALOG.l2, ()=>startLevel(1)),
